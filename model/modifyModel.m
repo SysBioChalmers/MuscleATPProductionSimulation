@@ -75,5 +75,9 @@ model = setParam(model, 'ub', 'HMR_8514', 0);
 model = setParam(model, 'lb', 'HMR_3859', 0);
 model = setParam(model, 'ub', 'HMR_3859', 0);
 
+%Add glycogen consumption
+glycogenPhos = createRXNStuct(model, 'GlycogenPhosphorylase', 'glycogen[c] + Pi[c] => glucose-1-phosphate[c]', 0, 1000, 'Starch and sucrose metabolism');
+model=addRxns(model,glycogenPhos,3,'c',false);
+
 %Overwrite raven model
 save('muscleModel', 'model')
