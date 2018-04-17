@@ -72,17 +72,7 @@ model = setParam(model, 'lb', 'HMR_6911', 0);
 model = setParam(model, 'ub', 'HMR_6911', 0);
 
 solutionD = solveLinMin(model, true)
-%printAffected(model, solutionC, solutionD)
+printAffected(model, solutionC, solutionD)
 
 
-%Remove lactate->ferrocytochrome bypass HMR_3859 HMR_8514
-model = setParam(model, 'lb', 'HMR_8514', 0);
-model = setParam(model, 'ub', 'HMR_8514', 0);
-model = setParam(model, 'lb', 'HMR_3859', 0);
-model = setParam(model, 'ub', 'HMR_3859', 0);
-solutionE = solveLinMin(model, true)
-%printAffected(model, solutionD, solutionE)
-
-% solutionF = solveLinMin(model, true)
-% printAffected(model, solutionE, solutionF)
 

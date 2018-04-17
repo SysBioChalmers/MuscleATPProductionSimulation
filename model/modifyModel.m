@@ -57,8 +57,6 @@ model.ub(findIndex(model.rxns, 'HMR_8611')) = 0;
 %Remove reversed Succinate fumarate loop
 model = setParam(model, 'ub', 'HMR_8743', 0);
 
-
-
 %Remove ubiqinol FAD miss anotations 
 model.lb(findIndex(model.rxns, 'HMR_3783')) = 0; %2-methylbutyryl-CoA[m] + ubiquinone[m] <=> tiglyl-CoA[m] + ubiquinol[m]
 model.ub(findIndex(model.rxns, 'HMR_3783')) = 0;
@@ -70,6 +68,12 @@ model.lb(findIndex(model.rxns, 'HMR_4242')) = 0; %glutaryl-CoA[m] + ubiquinone[m
 model.ub(findIndex(model.rxns, 'HMR_4242')) = 0;
 model.lb(findIndex(model.rxns, 'HMR_3212')) = 0; %propanoyl-CoA[m] + ubiquinone[m] => acrylyl-CoA[m] + ubiquinol[m]
 model.ub(findIndex(model.rxns, 'HMR_3212')) = 0;
+
+%remove hypothetical lactade dehydrogenase to ferrocytochrome
+model = setParam(model, 'lb', 'HMR_8514', 0);
+model = setParam(model, 'ub', 'HMR_8514', 0);
+model = setParam(model, 'lb', 'HMR_3859', 0);
+model = setParam(model, 'ub', 'HMR_3859', 0);
 
 %Overwrite raven model
 save('muscleModel', 'model')
