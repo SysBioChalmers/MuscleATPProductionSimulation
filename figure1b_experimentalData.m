@@ -16,7 +16,7 @@ exMap = [67 116 160
          190 209 234]/255;
 
 hold all     
-bar(data(:,1), 'FaceColor', exMap(1,:))
+bar(data(:,1), 'FaceColor', exMap(1,:), 'EdgeColor', 'none')
 errorbar(1:3,data(:,1), data(:,2),'k.')
 set(gca, 'XTick', [1 2 3])
 set(gca, 'XTickLabel', {'Complex I', 'Complex II', 'Max Capacity'})
