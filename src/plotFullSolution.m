@@ -1,17 +1,13 @@
-function plotFullSolution(model, growthRates, fullSolution, objectiveFunction)
+function plotFullSolution(model, growthRates, fullSolution, plotExchange)
     fluxThresh = 10^-3;
-    [exchangeRxns, exchangeRxnsIndexes]=getExchangeRxns(model,'both');
+ 
     
-    skipBiomass = findIndex(model.rxns, objectiveFunction);
+    reactionNumbers= getBounds(model, plotExchange);
     
-    exchangeRxnsIndexes(exchangeRxnsIndexes==skipBiomass) = []; 
     
-    %remove water
-    exchangeRxnsIndexes(exchangeRxnsIndexes==getBounds(model, {'H2O[s]'})) = []; 
-    
-    results = fullSolution(:,exchangeRxnsIndexes);
-
-    
+    results = fullSolution(:,reactionNumbers);
+ 
+   
     hold all
 
     highestFlux = max(max(abs(results)));
@@ -23,35 +19,16 @@ function plotFullSolution(model, growthRates, fullSolution, objectiveFunction)
     
     
     if not(isempty(growthRates))
-
-        emptyExchange = sum(abs(results))<= (fluxThresh * highestFlux);
-
-        results(:, emptyExchange) = [];
-        exchangeRxnsIndexes(emptyExchange) = [];
         
-        maxYVal = max(abs(results(:)))*1.1;
+        maxYVal = ceil(max(abs(results(:)))*1.1);
         maxXval = max(growthRates)*1.1;
 
         positiveFluxes = mean(results)>0;
+        results(:,not(positiveFluxes)) =  -results(:,not(positiveFluxes));
         
-        eqn1=getMetabolites(model, exchangeRxnsIndexes(not(positiveFluxes)));
-        eqn2=getMetabolites(model, exchangeRxnsIndexes(positiveFluxes));
-        
-        subplot(2,1,1);
-        plot(growthRates, -results(:,not(positiveFluxes)) , 'linewidth', 3)
+        plot(growthRates, results, 'linewidth', 3)
 
-        legend(eqn1, 'location', 'nw')
-        legend boxoff
-        set(gca,'FontSize',14,'FontName', 'Arial')
-        set(gca,'XTick',[])
-        ylim([0 maxYVal]);
-        xlim([0 maxXval]);
-        subplot(2,1,2);
-        plot(growthRates, results(:,positiveFluxes), 'linewidth', 3)
-
-        
-        model.rxns(exchangeRxnsIndexes(positiveFluxes))
-        legend(eqn2, 'location', 'nw')
+        legend(plotExchange, 'location', 'nw')
         legend boxoff
         ylim([0 maxYVal]);
         xlim([0 maxXval]);
