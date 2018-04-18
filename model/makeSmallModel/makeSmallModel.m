@@ -22,8 +22,10 @@ outMedia = {
 };
 
 
-[exchangeRxns, exchangeRxnsIndexes]=getExchangeRxns(model,'both');
 
+
+
+[exchangeRxns, exchangeRxnsIndexes]=getExchangeRxns(model,'both');
 
 %Remove ProtPool
 
@@ -54,7 +56,7 @@ banSubsystems = {
 model = removeSubsystems(model, banSubsystems);
 
 
-exceptions = {'HMR_3949', 'HMR_3825','HMR_4852','HMR_4888','HMR_4898','HMR_4922','HMR_4926','HMR_5043','HMR_6328','HMR_6513','HMR_7638'};
+exceptions = {'HMR_3949', 'HMR_3825','HMR_4852','HMR_4888','HMR_4898','HMR_4922','HMR_4926','HMR_5043','HMR_6328','HMR_7638'};
 mitTransport = ismember(model.subSystems, 'Transport, mitochondrial');
 for i = 1:length(exceptions)
     mitTransport(findIndex(model.rxns, exceptions{i})) = 0;
@@ -88,6 +90,8 @@ model2 = setParam(model1, 'lb', 'HMR_0483', 0);
 model2 = setParam(model2, 'ub', 'HMR_0483', 0);
 solutionC = solveLinMin(model2, true)
 %printAffected(model, solutionB, solutionC)
+
+
 
 
 %ETF-ubiquinone oxidoreductase knock
