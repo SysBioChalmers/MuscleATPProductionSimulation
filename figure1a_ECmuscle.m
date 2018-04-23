@@ -12,12 +12,10 @@ model.subSystems(ismember(model.subSystems, 'Alanine, aspartate and glutamate me
 model = mapDataToRxns(model, 'data/RxnAndSA.txt');
 
 %Set specific activity to high
-model.specificActivity(findIndex(model.rxns, 'HMR_6921')) = 3;
-
 rxnsWithValues = model.specificActivity>0;
 histogram(log10(model.specificActivity(rxnsWithValues)), 6)
 
-model = addSpecificActivityConstraint(model, 0.35, 0.1*0.5, 60);
+model = addSpecificActivityConstraint(model, 0.5, 0.053*0.72, 60);
 model = addReversedReactions(model);
 
 allowUncoupling = true;
@@ -35,7 +33,7 @@ minimalFlux= [-1000
               -1000
               -1000];
 
-growthRates = linspace(0, 9, 100);
+growthRates = linspace(0, 12, 100);
 
 reactionNumbers = getBounds(model, minimalMedia);
 model = setParam(model, 'obj', reactionNumbers(2), 1);
@@ -73,6 +71,7 @@ plotExchange = {
     };
 
 plotFullSolution(model, growthRates, fullSolution, plotExchange);
+ylim([0 3])
 % 
 % figure()
 % %results = runChemostatExperimentYields(model, growthRates, minimalMedia);
@@ -86,7 +85,7 @@ plotFullSolution(model, growthRates, fullSolution, plotExchange);
 massConstraintRow = findIndex(model.mets, 'MassConstraint');
 weightValue = model.b(massConstraintRow,2);
 weightRow = 1000 * full(model.S(massConstraintRow,:));
-fluxDistribution = fullSolution(99,:);
+fluxDistribution = fullSolution(2,:);
 
 %Normalize per half glucose
 fluxDistribution = -0.5*fluxDistribution/fluxDistribution(reactionNumbers(2));
