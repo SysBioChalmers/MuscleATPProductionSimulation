@@ -15,7 +15,7 @@ model = mapDataToRxns(model, 'data/RxnAndSA.txt');
 rxnsWithValues = model.specificActivity>0;
 histogram(log10(model.specificActivity(rxnsWithValues)), 6)
 
-model = addSpecificActivityConstraint(model, 0.5, 0.053*0.72, 60);
+model = addSpecificActivityConstraint(model, 0.5, 0.0444*0.72, 60);
 model = addReversedReactions(model);
 
 allowUncoupling = true;
@@ -33,7 +33,7 @@ minimalFlux= [-1000
               -1000
               -1000];
 
-growthRates = linspace(0, 12, 100);
+growthRates = linspace(0, 23, 100);
 
 reactionNumbers = getBounds(model, minimalMedia);
 model = setParam(model, 'obj', reactionNumbers(2), 1);
