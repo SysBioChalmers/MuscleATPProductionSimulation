@@ -3,6 +3,7 @@ function plotFullSolution(model, growthRates, fullSolution, plotExchange)
  
     
     reactionNumbers= getBounds(model, plotExchange);
+    plotExchange = simplifyMetNames(plotExchange);
     
     
     results = fullSolution(:,reactionNumbers);
@@ -49,5 +50,11 @@ function eqn2 = getMetabolites(model, rxns)
     for i = 1:length(eqn2)
        eqn2{i} = strrep(eqn2{i}, '[s]', '');
        eqn2{i} = strrep(eqn2{i}, '<=>', '');       
+    end
+end
+
+function mets = simplifyMetNames(mets)
+    for i = 1:length(mets)
+       mets{i} = strrep(mets{i}, '[s]', '');      
     end
 end
