@@ -23,6 +23,15 @@ model = addFatExchange(model, 's', 'AddedFatExchange');
 %Allow reversed IDH flux in the cytoplasm
 model.lb(findIndex(model.rxns, 'HMR_0710')) = -1000;
 
+%Add LDHA to cytosolic gene list.
+model.grRules{findIndex(model.rxns, 'HMR_4388')} = '(ENSG00000111716 or ENSG00000151116 or ENSG00000166796 or ENSG00000166800 or ENSG00000171989 or ENSG00000134333)';
+model=addGenes(model,'ENSG00000283447')
+
+
+
+%Add LDHA to cytosolic gene list.
+ENSG00000283447
+
 
 %Free lactate Transport
 lactRxn = createRXNStuct(model, 'FreeLactateTransport', 'L-lactate[s] <=> L-lactate[c]', -1000, 1000, 'Transport, extracellular');
@@ -78,6 +87,9 @@ model = setParam(model, 'ub', 'HMR_3859', 0);
 %Add glycogen consumption
 glycogenPhos = createRXNStuct(model, 'GlycogenPhosphorylase', 'glycogen[c] + Pi[c] => glucose-1-phosphate[c]', 0, 1000, 'Starch and sucrose metabolism');
 model=addRxns(model,glycogenPhos,3,'c',false);
+model.grRules{findIndex(model.rxns, 'GlycogenPhosphorylase')} = 'ENSG00000068976';
+
+
 
 %Overwrite raven model
 save('muscleModel', 'model')
