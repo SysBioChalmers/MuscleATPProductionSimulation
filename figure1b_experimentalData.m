@@ -1,7 +1,7 @@
 close all
 hold all
 
-factor = 5 * 60*60 * 10^-12 * 10^3 * 10^3; %per hour per gdw 
+factor = 1/(1-0.792) * 60*60 * 10^-12 * 10^3 * 10^3; %per hour per gdw 
 
 data = factor*[
     33.45	2.11
