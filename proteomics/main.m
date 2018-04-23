@@ -87,27 +87,6 @@ clc
 printGeneList(geneMap, uniqueGenes)
 
 %%
-ATPgenes = getInvolvedGenes(model, ismember(model.rxns, 'HMR_6916'));
-revMap = containers.Map(C.textdata(:,1), C.textdata(:,4));
-ATPUniprot = ATPgenes;
-for i = 1:length(ATPgenes)
-    if isKey(revMap, ATPgenes{i})
-        if strcmp(revMap(ATPgenes{i}), '')
-            disp(ATPgenes{i})
-        else
-            ATPUniprot{i} = revMap(ATPgenes{i});
-        end
-    else
-        disp(ATPgenes{i})
-    end
-end
-
-
-for i = 1:18
-    ATPUniprot{i} = uniprotMap(ATPUniprot{i})
-end
-
-%%
 load('../model/reducedModel.mat')
 result = zeros(length(model.rxns),1);
 eqns = constructEquations(model);
@@ -116,7 +95,7 @@ detectionLimit = min(A.data(:,2));
 
 %Asign genes from the NADPH version of NADH rxns
 model.grRules{findIndex(model.rxns, 'HMR_3957')} = 'ENSG00000182054';
-model.grRules{findIndex(model.rxns, 'HMR_6510')} = 'ENSG00000090013';
+%model.grRules{findIndex(model.rxns, 'HMR_6510')} = 'ENSG00000090013';
 
 
 for i = 1:length(model.rxns)
