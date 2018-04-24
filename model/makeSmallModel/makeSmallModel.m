@@ -23,8 +23,6 @@ outMedia = {
 
 
 
-
-
 [exchangeRxns, exchangeRxnsIndexes]=getExchangeRxns(model,'both');
 
 %Remove ProtPool
@@ -63,6 +61,12 @@ for i = 1:length(exceptions)
 end
 model.lb(mitTransport) = 0;
 model.ub(mitTransport) = 0;
+
+%Rename subsystems:
+model.subSystems{findIndex(model.rxns, 'HMR_4137')} = 'Tricarboxylic acid cycle and glyoxylate/dicarboxylate metabolism';
+model.subSystems(ismember(model.subSystems, 'Tricarboxylic acid cycle and glyoxylate/dicarboxylate metabolism')) = {'Tricarboxylic acid cycle'};
+model.subSystems(ismember(model.subSystems, 'Alanine, aspartate and glutamate metabolism')) = {'Tricarboxylic acid cycle'};
+
 
 
 %Remove all compartments appart from cytosol, mitochondria and extracell
@@ -128,6 +132,8 @@ reducedModel = removeRxns(model,totalSolution<tresh,true,true,true);
 reducedModel = rmfield(reducedModel,'rxnComps');
 reducedModel = rmfield(reducedModel,'geneComps');
 exportToExcelFormat(reducedModel,'reducedModel.xlsx')
+
+
 
 model = reducedModel;
 save('reducedModel.mat', 'model');
