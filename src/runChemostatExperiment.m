@@ -1,12 +1,7 @@
 function fullSolution = runChemostatExperiment(model, growthRates, objectiveFunction, minimizeRxn)
 fluxThresh = 10^-3;
 
-massConstraintRow = findIndex(model.mets, 'MassConstraint');
-
 fullSolution =  zeros(length(growthRates), length(model.rxns));
-weightEstimate = zeros(length(growthRates), 1);
-weightRow = full(model.S(massConstraintRow,:)); 
-
 
 
 for i = 1:length(growthRates)
@@ -17,8 +12,6 @@ for i = 1:length(growthRates)
     solution = solveLinMin(model, true);
     if length(solution.x)>1
         fullSolution(i,:) = solution.x;
-
-        weightEstimate(i) = weightRow * solution.x;
     end
     %printFluxesAvlant(model, solution.x, false)
 end
