@@ -36,18 +36,17 @@ ylim([0 1])
 
 %%
 %Plot mass distribution
-mapOfSystems = containers.Map;    
+mapOfSystems = containers.Map;   
+mapOfSystems('Myosin') = {'ENSG00000092054' 'ENSG00000125414' 'ENSG00000180209' 'ENSG00000168530' 'ENSG00000111245' 'ENSG00000109061' 'ENSG00000160808' 'ENSG00000086967' 'ENSG00000198467' 'ENSG00000196465' 'ENSG00000143549' 'ENSG00000101306' 'ENSG00000144821', 'ENSG00000101470', 'ENSG00000175084', 'ENSG00000177791', 'ENSG00000130595','ENSG00000114854','ENSG00000130598','ENSG00000105048'};
+mapOfSystems('Albumin') = {'ENSG00000163631'};
+mapOfSystems('Myoglobin') = {'ENSG00000198125'};
+mapOfSystems('Creatine') = {'ENSG00000104879' 'ENSG00000131730' 'ENSG00000166165'};
+mapOfSystems('Glycogen phosphorylase') = {'ENSG00000068976'};
 mapOfSystems('Glycolysis') = getInvolvedGenes(model, ismember(model.subSystems, 'Glycolysis / Gluconeogenesis'));
 mapOfSystems('OXPHOS') = getInvolvedGenes(model, ismember(model.subSystems, 'Oxidative phosphorylation'));
 mapOfSystems('TCA') = getInvolvedGenes(model, ismember(model.subSystems, 'Tricarboxylic acid cycle and glyoxylate/dicarboxylate metabolism'));
-
 mapOfSystems('Fatty Acids') = getInvolvedGenes(model, contains(model.subSystems,'fatty acid'));
 
-mapOfSystems('Myosin') = {'ENSG00000092054' 'ENSG00000125414' 'ENSG00000180209' 'ENSG00000168530' 'ENSG00000111245' 'ENSG00000109061' 'ENSG00000160808' 'ENSG00000086967' 'ENSG00000198467' 'ENSG00000196465' 'ENSG00000143549' 'ENSG00000101306' 'ENSG00000144821', 'ENSG00000101470', 'ENSG00000175084', 'ENSG00000177791', 'ENSG00000130595','ENSG00000114854','ENSG00000130598','ENSG00000105048'};
-mapOfSystems('Glycogen phosphorylase') = {'ENSG00000068976'};
-mapOfSystems('Creatine') = {'ENSG00000104879' 'ENSG00000131730' 'ENSG00000166165'};
-mapOfSystems('Albumin') = {'ENSG00000163631'};
-mapOfSystems('Myoglobin') = {'ENSG00000198125'};
 %mapOfSystems('Aktin') = {'ENSG00000075624', 'ENSG00000184009', 'ENSG00000077522', 'ENSG00000143632', 'ENSG00000248746', 'ENSG00000154553', 'ENSG00000120729', 'ENSG00000035403'};
 %mapOfSystems('Heatshock proteins') = {'ENSG00000109971', 'ENSG00000126803', 'ENSG00000115541', 'ENSG00000170606', 'ENSG00000144381', 'ENSG00000126602'};
 
@@ -60,11 +59,10 @@ mapOfSystems('TCA') = [mapOfSystems('TCA') 'ENSG00000120053', 'ENSG00000125166',
 %add cytochrome C to OXPHOS
 %mapOfSystems('OXPHOS') = [mapOfSystems('OXPHOS') 'ENSG00000172115'];
 
-
 %ENSG00000151729 %transporter of ATP from mitochondria
 %ENSG00000112992 %NNT
 
-allKeys = mapOfSystems.keys;
+allKeys = {'Myosin', 'Albumin', 'Myoglobin', 'Creatine', 'Glycogen phosphorylase', 'Glycolysis', 'OXPHOS', 'TCA', 'Fatty Acids'};
 
 allGenes = [];
 results = zeros(length(allKeys),1);
@@ -74,8 +72,8 @@ for i = 1:length(allKeys)
     allGenes = [allGenes uniqueGenes];
     results(i) = sumOfGenes(geneMap, curGenes);   
 end
-[results, indx] = sort(results, 'descend');
-allKeys = allKeys(indx);
+%[results, indx] = sort(results, 'descend');
+%allKeys = allKeys(indx);
 
 other = (1- sum(results));
 results = [results; other];
@@ -84,7 +82,23 @@ plotPie(results, allKeys)
 
 uniqueGenes = setdiff(geneList, allGenes);
 clc
-printGeneList(geneMap, uniqueGenes)
+%printGeneList(geneMap, uniqueGenes)
+%%
+figure()
+respirationChain = {
+'HMR_6921'
+'HMR_4652'
+'HMR_6918'
+'HMR_6914'
+'HMR_6916'};
+name = {'I', 'II', 'III', 'IV', 'V'};
+results = zeros(length(name),1);
+for i = 1:length(respirationChain)
+    curGenes = getInvolvedGenes(model, ismember(model.rxns, respirationChain{i}));
+    results(i) = sumOfGenes(geneMap, curGenes);  
+end
+plotPie(results, name)
+
 
 %%
 load('../model/reducedModel.mat')
@@ -106,8 +120,12 @@ end
 %Did not detect HMR_4391	DHAP[c] <=> GAP[c]
 results(findIndex(model.rxns, 'HMR_4391')) = (detectionLimit * 30791)/massSum;
 
+
+
 clc
+proteinDWCorrection = 0.7212;
+
 for i = 1:length(model.rxns)
-    fprintf('%s\t%s\t%2.6f\n', model.rxns{i}, eqns{i}, results(i))
+    fprintf('%s\t%s\t%2.6f\n', model.rxns{i}, eqns{i}, proteinDWCorrection*results(i))
 end
 
