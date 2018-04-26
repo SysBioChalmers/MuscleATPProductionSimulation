@@ -1,15 +1,11 @@
 load('model/reducedModel')
-addpath('src')
+addpath('src1')
 
 %rename subsystems
 %Pyruvate to Ac-Coa towards TCA
-model.subSystems{findIndex(model.rxns, 'HMR_4137')} = 'Tricarboxylic acid cycle and glyoxylate/dicarboxylate metabolism';
-model.subSystems(ismember(model.subSystems, 'Tricarboxylic acid cycle and glyoxylate/dicarboxylate metabolism')) = {'Tricarboxylic acid cycle'};
-model.subSystems(ismember(model.subSystems, 'Alanine, aspartate and glutamate metabolism')) = {'Tricarboxylic acid cycle'};
-
-
 
 model = mapDataToRxns(model, 'data/RxnAndSA.txt');
+model = mapProteomToRxns(model, 'data/RxnAndProtein.txt');
 
 %Set specific activity to high
 rxnsWithValues = model.specificActivity>0;
@@ -33,7 +29,7 @@ minimalFlux= [-1000
               -1000
               -1000];
 
-growthRates = linspace(0, 23, 100);
+growthRates = linspace(0, 22.1, 100);
 
 reactionNumbers = getBounds(model, minimalMedia);
 model = setParam(model, 'obj', reactionNumbers(2), 1);
@@ -42,6 +38,7 @@ objectiveFunction = {'human_ATPMaintainance'};
 
 
 model = configureModel(model, minimalMedia, minimalFlux);
+
 
 %Remove lactate
 if removeLactate
@@ -64,14 +61,16 @@ end
 
 fullSolution = runChemostatExperiment(model, growthRates, objectiveFunction);
 
+
 plotExchange = {
     'O2[s]'
     'glycogen[s]'
     'L-lactate[s]'
     };
-
 plotFullSolution(model, growthRates, fullSolution, plotExchange);
-ylim([0 3])
+ylim([0 15])
+
+
 % 
 % figure()
 % %results = runChemostatExperimentYields(model, growthRates, minimalMedia);
@@ -115,4 +114,26 @@ for i = 1:length(allSubs)
     end
 end
 
+respirationChain = {
+'HMR_6921'
+'HMR_4652'
+'HMR_6918'
+'HMR_6914'
+'HMR_6916'};
+name = {'I', 'II', 'III', 'IV', 'V'};
+
+for i = 1:length(respirationChain)
+    curRxn = findIndex(model.rxns, respirationChain{i});
+    proteinMass = model.proteinMass(curRxn);
+    predictedMass = fluxAndMass(curRxn)/1000;
+    
+    if predictedMass == 0
+        curRxn = findIndex(model.rxns, [respirationChain{i} '_back']);
+        predictedMass = fluxAndMass(curRxn)/1000;        
+    end
+        
+    if sumOfMass>10^-5
+       fprintf('%s\t%2.6f\t%2.6f\n', name{i}, predictedMass, proteinMass)
+    end
+end
 

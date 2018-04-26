@@ -3,7 +3,7 @@
 %future use.
 
 %load Raven Model
-addpath('../src')
+addpath('../src1')
 model = importExcelModel('HMRdatabase2_00.xlsx');
 addpath('cellSpecificModel')
 
@@ -25,12 +25,6 @@ model.lb(findIndex(model.rxns, 'HMR_0710')) = -1000;
 
 %Add LDHA to cytosolic gene list.
 model.grRules{findIndex(model.rxns, 'HMR_4388')} = '(ENSG00000111716 or ENSG00000151116 or ENSG00000166796 or ENSG00000166800 or ENSG00000171989 or ENSG00000134333)';
-model=addGenes(model,'ENSG00000283447')
-
-
-
-%Add LDHA to cytosolic gene list.
-ENSG00000283447
 
 
 %Free lactate Transport
