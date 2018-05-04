@@ -84,6 +84,18 @@ model=addRxns(model,glycogenPhos,3,'c',false);
 model.grRules{findIndex(model.rxns, 'GlycogenPhosphorylase')} = 'ENSG00000068976';
 
 
+%Remove cytosolic oxidation
+O2mets = ismember(model.metNames, 'O2');
+O2rxns = sum(abs(model.S(O2mets,:)))>0;
+
+%Ignore fatty acid oxidation
+O2rxns(contains(model.subSystems,'fatty acid')) = 0;
+
+%Ignore transport and oxphos
+O2rxns(ismember(model.rxns, {'HMR_4896', 'HMR_4898',  'HMR_6914', 'HMR_9048'})) = 0;
+model.lb(O2rxns) = 0;
+model.ub(O2rxns) = 0;
+
 
 %Overwrite raven model
 save('muscleModel', 'model')
