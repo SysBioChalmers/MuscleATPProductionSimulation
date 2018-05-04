@@ -7,7 +7,6 @@ addpath('src1')
 model = mapDataToRxns(model, 'data/RxnAndSA.txt');
 model = mapProteomToRxns(model, 'data/RxnAndProtein.txt');
 
-
 %Set specific activity to high
 rxnsWithValues = model.specificActivity>0;
 histogram(log10(model.specificActivity(rxnsWithValues)), 6)
@@ -18,10 +17,6 @@ model = addReversedReactions(model);
 allowUncoupling = true;
 complex1Bypass = false;
 removeLactate = false;
-
-massConstraintRow = findIndex(model.mets, 'MassConstraint');
-weightValue = model.b(massConstraintRow,2);
-weightRow = full(model.S(massConstraintRow,:));
 
 close all
 
@@ -40,7 +35,7 @@ reactionNumbers = getBounds(model, minimalMedia);
 model = setParam(model, 'obj', reactionNumbers(2), 1);
 
 objectiveFunction = {'human_ATPMaintainance'};
-model = setParam(model, 'lb', 'human_ATPMaintainance', 0); 
+
 
 model = configureModel(model, minimalMedia, minimalFlux);
 
@@ -65,8 +60,7 @@ end
 %model = setParam(model, 'ub', 'HMR_6916', 0); 
 
 fullSolution = runChemostatExperiment(model, growthRates, objectiveFunction);
-fullMass = fullSolution .* repmat(weightRow, size(fullSolution,1),1);
-massOfFlux = sum(fullMass,2);
+
 
 plotExchange = {
     'O2[s]'
@@ -76,26 +70,7 @@ plotExchange = {
 plotFullSolution(model, growthRates, fullSolution, plotExchange);
 ylim([0 15])
 
-figure();
-glyFlux = -fullSolution(:,findIndex(model.rxns, 'HMR_9728'));
-O2flux = -fullSolution(:,findIndex(model.rxns, 'HMR_9048'));
-TCAflux = fullSolution(:,findIndex(model.rxns, 'HMR_4152'));
 
-glyYields = growthRates'./glyFlux;
-O2ATP = growthRates'-TCAflux-3*glyFlux;
-O2Yields = O2ATP./O2flux/2;
-massYield = growthRates'./massOfFlux;
-
-plot(growthRates, glyYields, 'linewidth', 3)
-ylabel('ATP/glycogen')
-figure();
-plot(growthRates, O2Yields, 'linewidth', 3)
-ylabel('P/O ratio')
-ylim([0 2.5])
-figure();
-plot(growthRates, massYield, 'linewidth', 3)
-ylim([0 700])
-ylabel('ATP/g protein')
 % 
 % figure()
 % %results = runChemostatExperimentYields(model, growthRates, minimalMedia);
@@ -106,13 +81,14 @@ ylabel('ATP/g protein')
 % %printFluxesValues(model, fullSolution)
 
 %%
-
-
+massConstraintRow = findIndex(model.mets, 'MassConstraint');
+weightValue = model.b(massConstraintRow,2);
+weightRow = 1000 * full(model.S(massConstraintRow,:));
 fluxDistribution = fullSolution(2,:);
 
 %Normalize per half glucose
 fluxDistribution = -0.5*fluxDistribution/fluxDistribution(reactionNumbers(2));
-fluxAndMass = 1000 * fluxDistribution .* weightRow;
+fluxAndMass = fluxDistribution .*weightRow;
 equations = constructEquations(model);
 [subSystem, indx] = sort(model.subSystems);
 
