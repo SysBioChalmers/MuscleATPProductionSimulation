@@ -4,23 +4,30 @@ addpath('sampleData')
 model = superModel;
 settings = [];
 
-mScale = 37*(1-0.8); %kg muscle
+dwMuscle = 19.8*(1-0.792); %kg muscle
 m1Ratio = 0.55;
-c1 = 2; %mmol O2/gdw
-c2 = c1/2; %mmol O2/gdw
+trainingEffect = 2.2;
+c1 = 1.38 * 1.2 * trainingEffect; %mmol O2/gdw (compensating for fiber difference and training
+c2 = c1*0.51; %mmol O2/gdw
 
-model = addInternalConstraints(model, mScale, m1Ratio, c1, c2);
+model = addInternalConstraints(model, dwMuscle, m1Ratio, c1, c2);
+
 
 %Exchange fluxes:
-model = addTransportConstraints(model,   's',   {'O2'}, [-12], [0]);
-model = addTransportConstraints(model, 'sm1', {'palmitate', 'O2', 'L-lactate'}, [-0.03 -1000 -1000 0], [0 0 1000]);
-model = addTransportConstraints(model, 'sm2', {'palmitate', 'O2' , 'L-lactate'}, [-0.03 -1000 0], [0 0 1000]);
-model = addTransportConstraints(model, 'sm3', {'palmitate', 'L-lactate'}, [-0.03 -1000],  [0.18 0]);
+model = addTransportConstraints(model,   's',   {'O2'}, [-11.9], [0]);
+model = addTransportConstraints(model, 'sm1', {'palmitate', 'L-lactate'}, [-1000 -1000], [0 1000]);
+model = addTransportConstraints(model, 'sm2', {'palmitate', 'L-lactate'}, [-1000 0], [0 1000]);
+model = addTransportConstraints(model, 'sm3', {'palmitate', 'L-lactate'}, [-0.025 -1000],  [1000 0]);
+
 %Special constraints
-model = addSpecializedConstraints(model, 1000, 7.5, 1000);
+model = addSpecializedConstraints(model, 1000, 4.3+2.4, 1000);
 
 settings = addExchangeMedum(settings);
-settings.timeSteps = 20;
+settings.timeSteps = 60;
+
+%Make Uncoupling favorable over ATP degradation
+model = configureSMatrix(model, 10, 'HMR_7638_m3', 'H+[cm3]');
+model = configureSMatrix(model, -10, 'HMR_7638_m3', 'H+[mm3]');
 
 %quad, lincomb, uncoupling, lactate
 [fullSolution, ATPrate] = optimizeFluxes(model, settings, 'AandB');
@@ -38,4 +45,8 @@ figure()
 simData = plotFullSolutionAandB(model, ATPrate, fullSolutionMod, 'sb', {'sm1', 'sm2'});
 %figure()
 %compareWithKneeData(simData, 'BI', 10)
+figure()
+ucp3 = findIndex(model.rxns, 'HMR_7638_m3');
+plot(ATPrate, fullSolution(:,ucp3));
+
 
