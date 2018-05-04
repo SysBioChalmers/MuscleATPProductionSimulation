@@ -1,13 +1,25 @@
 close all
 hold all
 load('model/reducedModel')
-addpath('src')
+addpath('src1')
 saturation = 0.5;
 
 
 model = mapDataToRxns(model, 'data/RxnAndSA.txt');
 model = mapProteomToRxns(model, 'data/RxnAndProtein.txt');
+
+%We do not trust proteomics for 6-PHOSPHOFRUCTOKINASE
+model.proteinMass(findIndex(model.rxns,  'HMR_4379')) = -1;
+
+%We do not trust proteomics for TPI
+model.proteinMass(findIndex(model.rxns,  'HMR_4391')) = -1;
+
+%We do not trust proteomics for GPD2
+model.proteinMass(findIndex(model.rxns,  'HMR_0483')) = -1;
+
+
 [model, constraindRxns] = addProteinConstrant(model, saturation);
+
 
 
 minimalMedia = {
@@ -15,6 +27,13 @@ minimalMedia = {
     'glycogen[s]'
     'H2O[s]'
     };
+
+plotExchange = {
+    'O2[s]'
+    'glycogen[s]'
+    'L-lactate[s]'
+    };
+
 minimalFlux= [-1000
               -1000
               -1000];
@@ -42,11 +61,7 @@ model = setParam(model, 'obj', objectiveFunction, 1);
 solution = solveLin(model);
 
 
-plotExchange = {
-    'O2[s]'
-    'glycogen[s]'
-    'L-lactate[s]'
-    };
+
 
 %plotFullSolution(model, growthRates, fullSolution, plotExchange);
 hold all
@@ -54,7 +69,7 @@ hold all
 
 uBounds = model.ub(constraindRxns);
 uFlux = abs(solution.x(constraindRxns));
-eqns = constructEquations(model, constraindRxns);
+eqns = constructEquations(model, constraindRxns)
 enzymeUsage = saturation * uFlux./uBounds;
 [enzymeUsage, indx] = sort(enzymeUsage);
 eqns = eqns(indx);
@@ -108,7 +123,7 @@ for i = 1:length(respirationChain)
     
     predictedMass = curFlux/(60*specificActivity*0.5);  
         
-    if sumOfMass>10^-5
+    if proteinMass>0
        fprintf('%s\t%2.6f\t%2.6f\n', name{i}, predictedMass, proteinMass)
     end
 end
