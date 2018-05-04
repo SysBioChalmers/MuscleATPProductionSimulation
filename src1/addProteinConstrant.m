@@ -9,7 +9,7 @@ for i = 1:length(model.rxns)
        curSA = model.specificActivity(i);
        if curSA>0
            capacity = saturation*curSA*60*curProtein;
-           if model.lb(i)>0
+           if model.lb(i)<0
                model.lb(i) = -capacity;
            end
            if model.ub(i)>0
