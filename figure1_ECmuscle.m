@@ -76,26 +76,7 @@ plotExchange = {
 plotFullSolution(model, growthRates, fullSolution, plotExchange);
 ylim([0 15])
 
-figure();
-glyFlux = -fullSolution(:,findIndex(model.rxns, 'HMR_9728'));
-O2flux = -fullSolution(:,findIndex(model.rxns, 'HMR_9048'));
-TCAflux = fullSolution(:,findIndex(model.rxns, 'HMR_4152'));
 
-glyYields = growthRates'./glyFlux;
-O2ATP = growthRates'-TCAflux-3*glyFlux;
-O2Yields = O2ATP./O2flux/2;
-massYield = growthRates'./massOfFlux;
-
-plot(growthRates, glyYields, 'linewidth', 3)
-ylabel('ATP/glycogen')
-figure();
-plot(growthRates, O2Yields, 'linewidth', 3)
-ylabel('P/O ratio')
-ylim([0 2.5])
-figure();
-plot(growthRates, massYield, 'linewidth', 3)
-ylim([0 700])
-ylabel('ATP/g protein')
 % 
 % figure()
 % %results = runChemostatExperimentYields(model, growthRates, minimalMedia);
