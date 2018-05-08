@@ -1,7 +1,7 @@
 function compareWithSampleData(model, dataFolder, ATPrate, fullSolution, lag)
-%Expected baseline ~ 245 ml O2/min
+color2 = [215 86 40]/256;
+color1 = [93 155 211]/256;
 
-factorForInternalWork = 0;
 
 %Collect simulationdata:
 mTransp = getTransport(model, {'O2','CO2'}, 'sb', 's');
@@ -45,34 +45,34 @@ k = 8;
 X = movmean(Wdata,k);
 Y = movmean(VO2,k);
 E = movstd(VO2,k);
-color1 = [250 50 80]/256;
-color2 = [80 50 250]/256;
-plotErrorArea(X, Y, E, color2)
-scatter(Wdata,VO2, 10, 'MarkerFaceColor', color2,'MarkerEdgeColor', color2, 'MarkerFaceAlpha', 0.4, 'MarkerEdgeAlpha', 0.8)
 
-plot(Wmod, O2mod, 'k', 'linewidth', 2);
 
-ylabel('ml/min')
+
+plotErrorArea(X, Y, E, color1)
+plotScatter(Wdata, VO2, color1)  
+plot(Wmod, O2mod, 'linewidth', 2, 'color', color2);
+
 h = findobj(gca,'Type','line');
 
 ylim([0 inf])
 set(gca,'XTick',[])
-ylabel('ml/min')
+%ylabel('ml/min')
+title('vO2 [ml/min]')
 
 subplot(2,2,2)
 hold all
 Y = movmean(VCO2,k);
 E = movstd(VCO2,k);
 
-plotErrorArea(X, Y, E, color2)  
-scatter(Wdata,VCO2, 10, 'MarkerFaceColor', color2,'MarkerEdgeColor', color2, 'MarkerFaceAlpha', 0.4, 'MarkerEdgeAlpha', 0.8)
-
-plot(Wmod, CO2mod, 'k', 'linewidth', 2);
+plotErrorArea(X, Y, E, color1)  
+plotScatter(Wdata, VCO2, color1)
+plot(Wmod, CO2mod, 'k', 'linewidth', 2, 'color', color2);
 %scatter(VCO2(:,1), VCO2(:,2), 'bo');
 %scatter(VO2(:,1), VO2(:,2), 'ro');
 
 
-ylabel('ml/min')
+%ylabel('ml/min')
+title('vCO2 [ml/min]')
 set(gca,'XTick',[])
 h = findobj(gca,'Type','line');
 ylim([0 inf])
@@ -81,13 +81,14 @@ subplot(2,2,3)
 hold all
 Y = movmean(RQest,k);
 E = movstd(RQest,k);
-plotErrorArea(X, Y, E, color2)  
-scatter(Wdata,RQest, 10, 'MarkerFaceColor', color2,'MarkerEdgeColor', color2, 'MarkerFaceAlpha', 0.4, 'MarkerEdgeAlpha', 0.8)
-
-plot(Wmod, CO2mod./O2mod, 'k', 'linewidth', 2);
+plotErrorArea(X, Y, E, color1)  
+plotScatter(Wdata, RQest, color1)
+plot(Wmod, CO2mod./O2mod, 'linewidth', 2, 'color', color2);
 
 %scatter(RQest(:,1), RQest(:,2), 'bo');
-ylabel('RQ')
+title('RER (RQ)')
+%ylabel('RQ')
+xlabel('W')
 %set(gca,'XTick',[])
 % subplot(2,2,3)
 % hold all
@@ -144,8 +145,6 @@ lactateFlux = fullSolution(:,mTransp(1));
 lactateMod = tsmovavg(lactateFlux,'s',lag,1);
 lactate = load(['sampleData/' dataFolder '/la.txt']);
 %plot(lactate(:,1), lactate(:,2), 'o--');
-scatter(lactate(:,1), lactate(:,2), 10, 'MarkerFaceColor', color2,'MarkerEdgeColor', color2, 'MarkerFaceAlpha', 0.4, 'MarkerEdgeAlpha', 0.8)
-
 
 baseLine = mean(lactate(1:4,2));
 
@@ -161,10 +160,13 @@ Slactate = revMM(lactateFlux, vmax, km);
 %lactateConc = lactateConc + baseLine;
 
 ylim([0 inf])
-plot(W, Slactate, 'k-', 'linewidth', 2);
+plot(W, Slactate, 'linewidth', 2, 'color', color2);
 
+
+scatter(lactate(:,1),lactate(:,2), 15, 'MarkerFaceColor', color1,'MarkerEdgeColor', color1, 'MarkerFaceAlpha', 0.5, 'MarkerEdgeAlpha', 0.6)
 xlabel('W')
-ylabel('lactate mM')
+title('lactate [mM]')
+%ylabel('lactate mM')
 
 
 end
@@ -184,8 +186,12 @@ function plotErrorArea(X, Y, E, color)
    
    xvals = [X; flipud(X)];
    yvals = [lb; flipud(ub)];  
-   fill(xvals, yvals, color, 'edgecolor','none', 'FaceAlpha',0.4)
+   fill(xvals, yvals, color, 'edgecolor','none', 'FaceAlpha', 0.3)
    
+end
+
+function plotScatter(X, Y, color)  
+   scatter(X,Y, 10, 'MarkerFaceColor', color,'MarkerEdgeColor', color, 'MarkerFaceAlpha', 0.5, 'MarkerEdgeAlpha', 0.6)
 end
 
 function VE = ventilationModel(gasExchange)
