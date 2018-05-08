@@ -4,9 +4,10 @@ addpath('sampleData')
 model = superModel;
 settings = [];
 
-dwMuscle = 19.8*(1-0.792); %kg muscle
+dwMuscle = 20*(1-0.792); %kg muscle
 m1Ratio = 0.55;
 trainingEffect = 2.2;
+
 c1 = 1.38 * 1.2 * trainingEffect; %mmol O2/gdw (compensating for fiber difference and training
 c2 = c1*0.51; %mmol O2/gdw
 
@@ -23,7 +24,7 @@ model = addTransportConstraints(model, 'sm3', {'palmitate', 'L-lactate'}, [-0.02
 model = addSpecializedConstraints(model, 1000, 4.3+2.4, 1000);
 
 settings = addExchangeMedum(settings);
-settings.timeSteps = 60;
+settings.timeSteps = 20;
 
 %Make Uncoupling favorable over ATP degradation
 model = configureSMatrix(model, 10, 'HMR_7638_m3', 'H+[cm3]');
@@ -38,7 +39,8 @@ model = configureSMatrix(model, -10, 'HMR_7638_m3', 'H+[mm3]');
 fullSolutionMod=fullSolution;
 close all
 clf
-plotFullSolutionInternalBlood(model, ATPrate, fullSolutionMod, 'sb', {'sm1', 'sm2', 'sm3'});
+plotMetaboliteList = {'O2', 'glycogen', 'L-lactate', 'CO2', 'palmitate'};
+plotFullSolutionInternalBlood(model, ATPrate, fullSolutionMod, plotMetaboliteList, 'sb', {'sm1', 'sm2', 'sm3'});
 figure()
 compareWithSampleData(model, 'mikael', ATPrate, fullSolutionMod, 1)
 figure()
