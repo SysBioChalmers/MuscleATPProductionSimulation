@@ -78,16 +78,8 @@ legend boxoff
 ylabel('ATP/glycogen')
 set(gca,'ytick',[])
 ylim([0.5 4.5])
-subplot(3,1,2)
-hold all
-for i = 4:-1:1
-    barh(i, O2Yields(i), 'FaceColor', exMap(i,:), 'LineStyle', 'none');
-end
-ylabel('P/O ratio')
-set(gca,'ytick',[])
-ylim([0.5 4.5])
 
-subplot(3,1,3)
+subplot(3,1,2)
 hold all
 for i = 4:-1:1
     barh(i, massYield(i), 'FaceColor', exMap(i,:), 'LineStyle', 'none');
@@ -96,3 +88,14 @@ set(gca,'ytick',[])
 ylim([0.5 4.5])
 
 ylabel('ATP/protein')
+
+subplot(3,1,3)
+hold all
+for i = 4:-1:1
+    barh(i, O2Yields(i), 'FaceColor', exMap(i,:), 'LineStyle', 'none');
+end
+ylabel('P/O ratio')
+set(gca,'ytick',[])
+ylim([0.5 4.5])
+
+
