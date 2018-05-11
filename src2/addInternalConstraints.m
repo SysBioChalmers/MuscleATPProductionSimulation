@@ -1,16 +1,16 @@
-function model = addInternalConstraints(model, dwMuscle, m1Ratio, c1, c2)
+function model = addInternalConstraints(model, dwMuscle, m1Ratio, vO2perDryweight, m2Efficency, complex1Ratio, FAratio)
     model = configureSMatrix(model, m1Ratio, 'JoinMuscleATP1', 'ATPwork[sm1]');
     model = configureSMatrix(model, 1-m1Ratio, 'JoinMuscleATP1', 'ATPwork[sm2]');
     
-    scaledC1 = dwMuscle*c1*m1Ratio;
-    scaledC2 = dwMuscle*c2*(1-m1Ratio);
+    scaledC1 = dwMuscle*vO2perDryweight*m1Ratio;
+    scaledC2 = dwMuscle*m2Efficency*vO2perDryweight*(1-m1Ratio);
 
-    cmpxIfactor = 33.45/76.41; %the vO2 on complex I substrate vs (I + II)
-    cmpxIfactor = 5/3 * cmpxIfactor; %the stochiometric relation to complex IV
+    %the vO2 on complex I substrate vs (I + II)
+    %the stochiometric relation to complex IV
+    cmpxIfactor = 5/3 * complex1Ratio; 
     
-    fattyAcidFactor = 16.55/76.41;
-    fattyAcidFactor = fattyAcidFactor * 1/23; %stochiometery for fatty acids
-    fattyAcidFactor = fattyAcidFactor * 0.6; %fitting parameter
+    
+    fattyAcidFactor = FAratio * 1/23; %stochiometery for fatty acids
     
     model.ub(findIndex(model.rxns, 'HMR_6914_m1')) = scaledC1; %Oxygen in m1
     model.ub(findIndex(model.rxns, 'HMR_6914_m2')) = scaledC2; %Oxygen in m2
