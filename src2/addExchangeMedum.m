@@ -17,7 +17,7 @@ constraints =  [
 
 outMedia = {
     'H2O[s]'
-    'palmitate[s]'
+    'stearate[s]'
     'glycogen[s]'
     'O2[s]'
     'CO2[s]'

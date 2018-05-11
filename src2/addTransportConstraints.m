@@ -26,6 +26,7 @@ model.ub(mTransp) = 1000;
 mTransp = getTransport(model, {'glycogen', 'glucose'}, tissue, 'sb');
 model.ub(mTransp) = 0;
 
+
 for i = 1:length(mets)
     mTransp = getTransport(model, mets(i), tissue, 'sb');
     model.lb(mTransp) = lb(i);
