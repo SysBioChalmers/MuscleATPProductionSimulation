@@ -142,22 +142,10 @@ subplot(2,2,4)
 hold all
 mTransp = getTransport(model, {'L-lactate'}, 'sb', 'sm2');
 lactateFlux = fullSolution(:,mTransp(1));
-lactateMod = tsmovavg(lactateFlux,'s',lag,1);
 lactate = load(['sampleData/' dataFolder '/la.txt']);
 %plot(lactate(:,1), lactate(:,2), 'o--');
 
-baseLine = mean(lactate(1:4,2));
-
-vmax = 9;
-km = 10.73;
-%https://www.sigmaaldrich.com/catalog/product/roche/lldhro?lang=en&region=SE
-
-basalFlux = MM(baseLine, vmax, km);
-
-lactateFlux = lactateMod + basalFlux;
-Slactate = revMM(lactateFlux, vmax, km);
-%lactateFlux = lactateFlux 
-%lactateConc = lactateConc + baseLine;
+Slactate = convertVlacToConc(lactateFlux, 1.4, 9);
 
 ylim([0 inf])
 plot(W, Slactate, 'linewidth', 2, 'color', color2);
