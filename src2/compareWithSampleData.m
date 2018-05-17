@@ -18,8 +18,7 @@ Wmod = tsmovavg(W,'s',lag,2);
 % O2mod = O2;
 % Wmod = W; 
 
-ventMod = max(O2mod, CO2mod);
-ventMod = ventilationModel(max(O2mod, CO2mod));%43 Ml per breath
+
 
 %Collect sample data
 % VO2 = load(['sampleData/' data '/VO2.txt']);
@@ -85,58 +84,10 @@ plotErrorArea(X, Y, E, color1)
 plotScatter(Wdata, RQest, color1)
 plot(Wmod, CO2mod./O2mod, 'linewidth', 2, 'color', color2);
 
-%scatter(RQest(:,1), RQest(:,2), 'bo');
+
 title('RER (RQ)')
-%ylabel('RQ')
+
 xlabel('W')
-%set(gca,'XTick',[])
-% subplot(2,2,3)
-% hold all
-% Y = movmean(ventData,k);
-% E = movstd(ventData,k);
-% plotErrorArea(X, Y, E, color2)  
-% 
-% 
-% plot(Wmod, ventMod, 'linewidth', 2, 'color', color2);
-% scatter(Wdata, ventData, 10, 'MarkerFaceColor', color2, 'MarkerEdgeColor', 'none', 'MarkerFaceAlpha', 0.5)
-% 
-% xlabel('W')
-% ylabel('VE')
-% 
-% subplot(2,2,4)
-% hold all
-% 
-% delta = diff([Wmod' O2mod']);
-% efficency = delta(:,1)./delta(:,2);
-% %efficency = Wmod./O2mod;
-% plot(Wmod(2:end), efficency, 'linewidth', 3);
-% 
-% %timePoints = linspace(min(VO2(:,1)), max(VO2(:,1)), 30);
-% %linReg = polyfit(VO2(:,1),VO2(:,2),2);
-% %plot(timePoints, timePoints*linReg(1)*2 + linReg(2), 'k-', 'linewidth', 2)
-% 
-% 
-% efficency2 = diff(smoothO2);
-% efficency2 = efficency2(:,1)./efficency2(:,2);
-% 
-% plot(smoothO2(2:end,1), efficency2, 'bo')
-% trend = tsmovavg([smoothO2(2:end,1) efficency2],'s',2,1);
-% plot(trend(:,1), trend(:,2), 'k-', 'linewidth', 2)
-% maxVal = max(max(efficency), max(efficency2))*1.1;
-% ylim([0 maxVal])
-% 
-% xlabel('W')
-% %ylabel('dW/dO2')
-% ylabel('D Efficency')
-
-%legend('Model', 'Data (moving avg.)', 'trend (moving avg.)', 'location', 'se')
-
-
-%plot(O2mod, HRestimate, 'linewidth', 3);
-%scatter(HRData(:,1), HRData(:,2), 'bx');
-%xlabel('vO2')
-%ylabel('Heart rate')
-
 
 subplot(2,2,4)
 hold all
@@ -156,7 +107,10 @@ xlabel('W')
 title('lactate [mM]')
 %ylabel('lactate mM')
 
-
+figure()
+hold on
+plotScatter(Wdata, Wdata./VO2, color1)  
+plot(Wmod, Wmod./O2mod, 'linewidth', 2, 'color', color2);
 end
 
 function v = MM(S, vmax,km)
