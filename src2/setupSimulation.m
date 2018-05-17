@@ -1,4 +1,4 @@
-function [ATPrate, fullSolution] = setupSimulation(model, settings, maintainance, internalWork, dwMuscle, m1Ratio, vO2perDryweight, m2Efficency, complex1Ratio, vO2max, peripheralFA, peripheralLactateCapacity, FAFactor)
+function model = setupSimulation(model, maintainance, internalWork, dwMuscle, m1Ratio, vO2perDryweight, m2Efficency, complex1Ratio, vO2max, peripheralFA, peripheralLactateCapacity, FAFactor)
     model = addInternalConstraints(model, dwMuscle, m1Ratio, vO2perDryweight, m2Efficency, complex1Ratio, FAFactor);
     model = addTransportConstraints(model,   's', {'O2'}, [-vO2max], [0]);
     model = addTransportConstraints(model, 'sm3', {'palmitate', 'L-lactate'}, [-peripheralFA -peripheralLactateCapacity],  [0 0]);    
@@ -13,13 +13,5 @@ function [ATPrate, fullSolution] = setupSimulation(model, settings, maintainance
     model.ub(mTransp) = 1000;
 
     model = addExchangeMedum(model);
-    
-    
-    %set objective function
-    settings.primaryObjective = 'MuscleATPOut';    
-    settings.minRxns = {'glycogen_Exchange_', 'O2_Exchange_b',  'HMR_9135_m1', 'HMR_9135_m2', 'HMR_9135_m3'};
-    settings.minVal = [1, 1, 1 -1, 1];
-    [ATPrate, fullSolution] = runFullModel(model, settings);
-
 end
 
