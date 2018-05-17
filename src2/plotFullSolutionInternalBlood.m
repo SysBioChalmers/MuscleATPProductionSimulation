@@ -3,7 +3,7 @@ function data = plotFullSolutionInternalBlood(model, growthRates, results, metab
     targetValue = 0.3;
     ylimValue = 7;
     ytext = 'Flux mol/h';    
-    xtext = 'Watt';
+    xtext = 'W';
     W = 1000*molToW(growthRates);
     
         for i=1:length(otherComp)
