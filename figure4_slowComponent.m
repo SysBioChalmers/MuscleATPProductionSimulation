@@ -9,7 +9,8 @@ lactateTreshold = 250;
 wattMax = 350;
 timeSteps = 3;
 
-timeSpan = [30, 6*60];
+timeSpan = [0, 20*60];
+interestingTime = [0 6*60];
 vMax = 9;
 basalFlux = 1;
 
@@ -71,18 +72,30 @@ wattLabels = wattLabels(end:-1:1);
 legend(wattLabels)
 legend boxoff
 
+for i = 1:size(lactateResults,1)
+    plot(interestingTime, (lactateResults(i,end)*[1 1]), 'k--')
+end
+
 xlabel('time [s]')
 ylabel('[lactate]')
 title('Lactate dynamics')
+xlim(interestingTime)
 
 subplot(2,2,4)
 hold all
 for i = size(vO2results,1):-1:1
     plot(tIn, vO2results(i,:), 'linewidth', 3)
 end
+
 legend(wattLabels, 'location', 'se')
 legend boxoff
-ylim([0 inf])
+
+for i = 1:size(vO2results,1)
+    plot(interestingTime, vO2results(i,end)*[1 1], 'k--')
+end
+
+
+xlim(interestingTime)
 xlabel('time [s]')
 ylabel('vO2')
 title('Oxygen dynamics')
