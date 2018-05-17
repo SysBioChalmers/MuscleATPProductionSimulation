@@ -5,7 +5,7 @@ model = superModel;
 
 
 %Random sampling settings
-nrOfSamples = 10;
+nrOfSamples = 50;
 pertubationLevel = 0.2; %+- 20%
 
 
@@ -20,14 +20,15 @@ vO2max = 11.9;
 maintainance = 4.3;
 internalWork = 2.4;
 peripheralFA = 0.02;
-peripheralFAsynth = 0.05;
+peripheralLactateCapacity = 1.8;
 FAFactor = 16.55/76.41 * 0.6;
 
-settings.timeSteps = 50;
-settings.pfba = false;
+
 
 %Make reference condition
-[referenceATP, referenceSolution] = setupAndRunSimulation(model, settings, maintainance, internalWork, dwMuscle, m1Ratio, vO2perDryweight, m2Efficency, complex1Ratio, vO2max, peripheralFA, peripheralFAsynth, FAFactor);
+model = setupSimulation(model, maintainance, internalWork, dwMuscle, m1Ratio, vO2perDryweight, m2Efficency, complex1Ratio, vO2max, peripheralFA, peripheralLactateCapacity, FAFactor);
+settings = setSimulationSettings(20, false);
+[referenceATP, referenceSolution] = runFullModel(model, settings);
 
 %Store parameters
 parameterList = zeros(11,1);
@@ -40,10 +41,8 @@ parameterList(6) = m2Efficency;
 parameterList(7) = complex1Ratio;
 parameterList(8) = vO2max;
 parameterList(9) = peripheralFA;
-parameterList(10) = peripheralFAsynth;
+parameterList(10) = peripheralLactateCapacity;
 parameterList(11) = FAFactor;
-
-
 
 %Result vectors
 ATPResuls = zeros(nrOfSamples,settings.timeSteps); 
@@ -58,7 +57,8 @@ for i = 1:nrOfSamples
     i
     randValues = (1-pertubationLevel) + 2 * pertubationLevel * rand(length(parameterList),1);
     perturb = parameterList .* randValues;
-    [ATPrate, fullSolution] = setupAndRunSimulation(model, settings, perturb(1), perturb(2), perturb(3),  perturb(4), perturb(5), perturb(6), perturb(7), perturb(8), perturb(9), perturb(10));
+    modelPerturbed = setupSimulation(model, perturb(1), perturb(2), perturb(3),  perturb(4), perturb(5), perturb(6), perturb(7), perturb(8), perturb(9), perturb(10), perturb(11));
+    [ATPrate, fullSolution] = runFullModel(model, settings);
     ATPResuls(i,:) = ATPrate;
     vO2Resuls(i,:) = fullSolution(:, readouts(1));
     vCO2Resuls(i,:) = fullSolution(:, readouts(2));
@@ -70,7 +70,6 @@ end
 %Plot sampling result
 subplot(1,4,1)
 hold all
-colormap(exMap) 
 plot(ATPResuls', -vO2Resuls', 'color', 0.5*[1 1 1])
 plot(mean(ATPResuls), -mean(vO2Resuls), 'r', 'linewidth', 2)
 plot(referenceATP, -referenceSolution(:, readouts(1)), 'k', 'linewidth', 3)
@@ -81,7 +80,6 @@ xlabel('mmol ATP')
 
 subplot(1,4,2)
 hold all
-colormap(exMap) 
 plot(ATPResuls', vCO2Resuls', 'color', 0.5*[1 1 1])
 plot(mean(ATPResuls), mean(vCO2Resuls), 'r', 'linewidth', 2)
 plot(referenceATP, referenceSolution(:, readouts(2)), 'k', 'linewidth', 3)
@@ -90,7 +88,6 @@ xlabel('mmol ATP')
 
 subplot(1,4,3)
 hold all
-colormap(exMap) 
 plot(ATPResuls', -vglycogenResuls', 'color', 0.5*[1 1 1])
 plot(mean(ATPResuls), -mean(vglycogenResuls), 'r', 'linewidth', 2)
 plot(referenceATP, -referenceSolution(:, readouts(3)), 'k', 'linewidth', 3)
@@ -99,7 +96,6 @@ xlabel('mmol ATP')
 
 subplot(1,4,4)
 hold all
-colormap(exMap) 
 plot(ATPResuls', -(vCO2Resuls./vO2Resuls)', 'color', 0.5*[1 1 1])
 plot(mean(ATPResuls), -mean(vCO2Resuls./vO2Resuls), 'r', 'linewidth', 2)
 plot(referenceATP, -referenceSolution(:, readouts(2))./referenceSolution(:, readouts(1)), 'k', 'linewidth', 3)
