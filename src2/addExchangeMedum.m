@@ -1,4 +1,4 @@
-function settings = addExchangeMedum(settings)
+function model = addExchangeMedum(model)
 %Minimal media simulation
 inMedia = {
     'glycogen[s]'
@@ -6,6 +6,7 @@ inMedia = {
     'H2O[s]'
     'CO2[s]'
     'O2[s]'
+    %'glutamate[s]'
 };
 constraints =  [
     -1000
@@ -13,6 +14,7 @@ constraints =  [
     -1000
     -1000
     -0
+    %-10000
 ];
 
 outMedia = {
@@ -21,6 +23,7 @@ outMedia = {
     'glycogen[s]'
     'O2[s]'
     'CO2[s]'
+    %'alanine[s]'
     'ATPwork[s]'
     'ATPmaintainance[s]'
 };
@@ -32,15 +35,25 @@ outConstraints = [
     1000
     1000
     0
+    %1000
     1000
     1000
     ];
 
-settings.primaryObjective = 'MuscleATPOut';
-settings.inMedia = inMedia;
-settings.inValues = constraints;
-settings.outMedia = outMedia;
-settings.outConstraints = outConstraints;
+
+[exchangeRxns, exchangeRxnsIndexes]=getExchangeRxns(model,'both');
+
+reactionIn= getBounds(model, inMedia);
+reactionOut = getBounds(model, outMedia);
+
+model = setParam(model, 'lb', exchangeRxnsIndexes, 0);
+model = setParam(model, 'ub', exchangeRxnsIndexes, 0);
+
+model = setParam(model, 'lb', reactionIn, constraints);
+model = setParam(model, 'ub', reactionOut, outConstraints);
+
+
+
 
 end
 
