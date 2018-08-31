@@ -20,12 +20,8 @@ model = configureSMatrix(model, -3, 'HMR_6916', 'H+[m]');
 %Add fat reactions
 model = addFatExchange(model, 's', 'AddedFatExchange');
 
-%Allow reversed IDH flux in the cytoplasm
-model.lb(findIndex(model.rxns, 'HMR_0710')) = -1000;
-
 %Add LDHA to cytosolic gene list.
 model.grRules{findIndex(model.rxns, 'HMR_4388')} = '(ENSG00000111716 or ENSG00000151116 or ENSG00000166796 or ENSG00000166800 or ENSG00000171989 or ENSG00000134333)';
-
 
 %Free lactate Transport
 lactRxn = createRXNStuct(model, 'FreeLactateTransport', 'L-lactate[s] <=> L-lactate[c]', -1000, 1000, 'Transport, extracellular');
@@ -33,10 +29,6 @@ model=addRxns(model,lactRxn,3,'c',false);
 
 %Allow export of alanine from mitochondria
 model = setParam(model, 'lb', 'HMR_5113', -1000);
-
-
-
-
 
 model = myoConstrain(model)
 
@@ -60,7 +52,7 @@ model.ub(findIndex(model.rxns, 'HMR_8611')) = 0;
 %Remove reversed Succinate fumarate loop
 model = setParam(model, 'ub', 'HMR_8743', 0);
 
-%Remove ubiqinol FAD miss anotations 
+%Remove ubiqinol FAD miss-anotations 
 model.lb(findIndex(model.rxns, 'HMR_3783')) = 0; %2-methylbutyryl-CoA[m] + ubiquinone[m] <=> tiglyl-CoA[m] + ubiquinol[m]
 model.ub(findIndex(model.rxns, 'HMR_3783')) = 0;
 model.lb(findIndex(model.rxns, 'HMR_3751')) = 0; %isobutyryl-CoA[m] + ubiquinone[m] => methacrylyl-CoA[m] + ubiquinol[m]
