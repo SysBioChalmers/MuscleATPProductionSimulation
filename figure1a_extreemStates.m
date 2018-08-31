@@ -26,7 +26,8 @@ model = setParam(model, 'lb', objectiveFunction, 0);
 model = setParam(model, 'ub', objectiveFunction, 1000);
 model = setParam(model, 'obj', objectiveFunction, 1);
 
-solutionNames = {'Aerobic', 'Complex I bypass', 'Uncoupling', 'Fermentative'};
+%solutionNames = {'Aerobic', 'Complex I bypass', 'Uncoupling', 'Fermentative'};
+solutionNames = {'Aerobic', 'Complex I bypass', 'Fermentative', 'Uncoupling'};
 solutions = zeros(4,length(model.rxns));
 
 %Remove lactate
@@ -41,12 +42,12 @@ solutions(2,:) = res.x;
 %uncoupling
 model = setParam(model, 'ub', 'HMR_6916', 0); 
 res = solveLinMin(model);
-solutions(3,:) = res.x;
+solutions(4,:) = res.x;
 
 %Remove oxygen
 model = setParam(model, 'ub', 'HMR_6914', 0); 
 res = solveLinMin(model);
-solutions(4,:) = res.x;
+solutions(3,:) = res.x;
 
 fullMass = abs(solutions) .* repmat(weightRow, size(solutions,1),1);
 massOfFlux = sum(fullMass,2);
@@ -70,32 +71,78 @@ exMap = [67 116 160
 
 subplot(3,1,1)
 hold all
-for i = 4:-1:1
+for i = 3:-1:1
     barh(i, glyYields(i), 'FaceColor', exMap(i,:), 'LineStyle', 'none');
 end
-legend(fliplr(solutionNames))
+legend(fliplr(solutionNames(1:3)))
 legend boxoff
 ylabel('ATP/glycogen')
 set(gca,'ytick',[])
-ylim([0.5 4.5])
+ylim([0.5 3.5])
 
 subplot(3,1,2)
 hold all
-for i = 4:-1:1
+for i = 3:-1:1
     barh(i, massYield(i), 'FaceColor', exMap(i,:), 'LineStyle', 'none');
 end
 set(gca,'ytick',[])
-ylim([0.5 4.5])
+ylim([0.5 3.5])
 
 ylabel('ATP/protein')
 
 subplot(3,1,3)
 hold all
-for i = 4:-1:1
+for i = 3:-1:1
     barh(i, O2Yields(i), 'FaceColor', exMap(i,:), 'LineStyle', 'none');
 end
 ylabel('P/O ratio')
 set(gca,'ytick',[])
-ylim([0.5 4.5])
+ylim([0.5 3.5])
 
+%%
+load('model/reducedModel')
+model = mapDataToRxns(model, 'data/RxnAndSA.txt');
+model = addSpecificActivityConstraint(model, 0.5, 0.0444*0.72, 60);
+model = addReversedReactions(model);
 
+massConstraintRow = findIndex(model.mets, 'MassConstraint');
+weightValue = model.b(massConstraintRow,2);
+weightRow = full(model.S(massConstraintRow,:));
+
+minimalFlux= [-1000
+              -1000
+              -1000];
+
+growthRates = linspace(0, 22.1, 100);
+
+reactionNumbers = getBounds(model, minimalMedia);
+model = setParam(model, 'obj', reactionNumbers(2), 1);
+
+objectiveFunction = {'human_ATPMaintainance'};
+model = setParam(model, 'lb', 'human_ATPMaintainance', 0); 
+
+model = configureModel(model, minimalMedia, minimalFlux);
+
+fullSolution = runChemostatExperiment(model, growthRates, objectiveFunction);
+fullMass = fullSolution .* repmat(weightRow, size(fullSolution,1),1);
+massOfFlux2 = sum(fullMass,2);
+
+%%
+figure()
+hold all
+ATPperGly = growthRates./-fullSolution(:,reactionNumbers(2))';
+ATPperProtein = growthRates./massOfFlux2';
+
+ATPperProtein(1) = 0;
+ATPperGly(1) = ATPperGly(2);
+
+area(ATPperProtein, ATPperGly, 'FaceColor', [17 115 187]/256, 'FaceAlpha', 0.2, 'EdgeColor', 'none')
+plot(ATPperProtein, ATPperGly, 'linewidth', 2)
+ylim([0 36])
+xlim([0 701])
+ylabel('ATP/glycogen')
+xlabel('mmol ATP/g protein/h')
+scatter(massYield, glyYields, 50, 'filled')
+for i = 1:length(glyYields)
+    text(massYield(i), glyYields(i), solutionNames{i})
+end
