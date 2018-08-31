@@ -3,7 +3,10 @@ A = importdata('proteomicLean.txt');
 C = importdata('ID_conversion_key.txt');
 uniprotMap = containers.Map(C.textdata(:,4), C.textdata(:,1));
 
-
+%Note that the following protein mapping has been added
+%GLYCEROL-3-PHOSPHATE DEHYDROGENASE 1-LIKE.  -> P43304
+%CDNA FLJ44241 FIS, CLONE THYMU3008436, HIGHLY SIMILAR
+%TO 6-PHOSPHOFRUCTOKINASE, MUSCLE TYPE.;     -> P08237
 
 %Map uniprot to ensembl genes
 geneList = A.textdata(:,1);
