@@ -8,7 +8,6 @@ function result = getTransport(model, metabolite, comp1, comp2)
     for i = 1:length(metabolite)
        currentMets = ismember(model.metNames, metabolite{i});
        currentReaction = find(sum(reducedS(currentMets,:),1));
-       allReactonNr(currentReaction);
        result(i) = allReactonNr(currentReaction);
     end
 end

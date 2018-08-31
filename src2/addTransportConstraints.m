@@ -15,6 +15,8 @@ transpMedia = {
      'L-lactate'
      'palmitate'
      'H2O'
+%     'alanine'
+     %'glutamate'
 };
 
 %Open exchange reactions
