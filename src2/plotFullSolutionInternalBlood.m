@@ -1,31 +1,36 @@
 function data = plotFullSolutionInternalBlood(model, growthRates, results, metaboliteList, bloodComp, otherComp)
     hold all       
     targetValue = 0.3;
-    ylimValue = 7;
+    ylimValue = 8;
     ytext = 'Flux mol/h';    
     xtext = 'W';
     W = 1000*molToW(growthRates);
+    modifiedMetNames =modifyMetNames(model);
     
         for i=1:length(otherComp)
-            subplot(1,length(otherComp),i);
-            
-            
+            subplot(1,length(otherComp),i);           
 
 %           [metabolites, values] = getAllMetabolites(model, results, reactionSet{i});
             transportReactions = getTransport(model, metaboliteList, bloodComp, otherComp{i});
             values = results(:,transportReactions)';
 
-            metNames = metaboliteList;           
-            metNames = indicateDirection(metNames, values);
+            for j = 1:size(values,1)
+                metaboliteId = ismember(modifiedMetNames, [metaboliteList{j} '[' otherComp{i} ']']);
+                stochiometry = full(model.S(metaboliteId,transportReactions(j)));
+                values(j,:) = values(j,:) * stochiometry;
+            end
             
-%            targetValue = max(max(values)) * amplificationThresh;
+
+            metNames = metaboliteList;                       
             
             for j = 1:size(values,1)
-               if max(abs(values(j,:)))< targetValue 
+                metNames{j}
+               if ismember(metNames{j}, {'palmitate', 'stearate'})
                     values(j,:) = values(j,:)*10;
                     metNames{j} = [metNames{j} '[x10]'];
                end
             end
+            metNames = indicateDirection(metNames, values);
             
             %Show legend and y axis in subfigure 1
             if i>1
