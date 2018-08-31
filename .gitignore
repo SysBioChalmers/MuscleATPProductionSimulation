@@ -74,3 +74,6 @@ model/~$HMRdatabase2_00.xlsx
 sampleData/loadSampleData.m
 sampleData/moveAvg.m
 src2/runFullModel.asv
+glycogenKm/glycogenWmodel.txt
+glycogenKm/main.m
+randomSampling.mat
