@@ -1,10 +1,12 @@
-function Slactate = convertVlacToConc(lactateFlux, baseLine, vmax)
+function Slactate = convertVlacToConc(lactateFlux, baseConcentration, vmax)
 %    vmax = 9;
     km = 10.73;
 %    baseLine = 1.3; 
-    basalFlux = MM(baseLine, vmax, km);
+    basalFlux = MM(baseConcentration, vmax, km);
     lactateFlux = lactateFlux + basalFlux;
     Slactate = revMM(lactateFlux, vmax, km);
+    Slactate((lactateFlux+basalFlux)>vmax) = inf;
+    
     %https://www.sigmaaldrich.com/catalog/product/roche/lldhro?lang=en&region=SE
     
 end
