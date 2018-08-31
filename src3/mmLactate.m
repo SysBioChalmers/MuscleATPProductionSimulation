@@ -1,5 +1,4 @@
-function rate = mmLactate(substrate)
-    vmax = 9;
+function rate = mmLactate(substrate, vmax)
     km = 10.73;
     rate = (vmax*substrate)./(km + substrate);
 end
