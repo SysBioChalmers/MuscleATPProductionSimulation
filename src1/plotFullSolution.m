@@ -14,9 +14,9 @@ function plotFullSolution(model, growthRates, fullSolution, plotExchange)
     highestFlux = max(max(abs(results)));
 
 
-    emptySolutions = mean(abs(results),2)<=0;
-    results(emptySolutions,:) = [];
-    growthRates(emptySolutions) = [];
+%     emptySolutions = mean(abs(results),2)<=0;
+%     results(emptySolutions,:) = [];
+%     growthRates(emptySolutions) = [];
     
     
     if not(isempty(growthRates))
@@ -34,7 +34,7 @@ function plotFullSolution(model, growthRates, fullSolution, plotExchange)
         ylim([0 maxYVal]);
         xlim([0 maxXval]);
         xlabel('Rate', 'FontSize',14,'FontName', 'Arial')
-        ylabel('Flux mMol/gdw/h', 'FontSize',14,'FontName', 'Arial')
+        ylabel('Flux mmol/gdw/h', 'FontSize',14,'FontName', 'Arial')
         set(gca,'FontSize',14,'FontName', 'Arial')
         %figure()
         %plot(growthRates, weightEstimate)
