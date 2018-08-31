@@ -1,8 +1,9 @@
-function [dydt] = lactateOde(t, y, volume, basalFlux, muscleflux)
-    S = y(1); %mM lactate
-    v1 = basalFlux;
-    v2 = muscleflux;
-    v3 = mmLactate(S);
+function [dydt] = lactateOde(t, y, volume, basalFlux, vmax, muscleflux)
+    S = y(1)/volume; %mM lactate
+    v1 = 1000*basalFlux; %mM/h
+    v2 = 1000*muscleflux;     %mM/h
+    v3 = 1000*mmLactate(S, vmax); %mM/h
     
-    dydt = (v1 + v2 - v3)/volume;
+    dydt = (v1 + v2 - v3);
 end
+
