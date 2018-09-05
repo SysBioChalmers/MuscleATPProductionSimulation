@@ -228,7 +228,7 @@ legend boxoff
 %ylim([14 24])
 
 % figure()
-% compareWithSampleData(model, 'mikael', ATPrate, fullSolution)
+% compareWithSampleData(model, 'subject1', ATPrate, fullSolution)
 % figure()
 % plotMetaboliteList = {'O2', 'glycogen', 'L-lactate', 'CO2', 'glucose', 'palmitate', 'stearate'};
 % plotFullSolutionInternalBlood(model, ATPrate, fullSolution, plotMetaboliteList, 'sb', {'sm1', 'sm2', 'sm3'});

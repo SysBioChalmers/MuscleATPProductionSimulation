@@ -40,7 +40,7 @@ model.S(findIndex(model.mets, 'oxygenTradeof'),:) = 0;
 %%
 close all
 clf
-compareWithSampleData(model, 'mikael', ATPrate, fullSolution)
+compareWithSampleData(model, 'subject1', ATPrate, fullSolution)
 figure()
 plotMetaboliteList = {'O2', 'glycogen', 'L-lactate', 'CO2', 'palmitate', 'stearate'};
 plotFullSolutionInternalBlood(model, ATPrate, fullSolution, plotMetaboliteList, 'sb', {'sm1', 'sm2', 'sm3'});
