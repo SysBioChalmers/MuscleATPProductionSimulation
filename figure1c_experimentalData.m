@@ -83,17 +83,25 @@ hold all
 uBounds = model.ub(constraindRxns);
 uFlux = max(abs(fullSolution(:,constraindRxns)));
 eqns = constructEquations(model, constraindRxns);
-enzymeUsage = saturation * uFlux'./uBounds;
-[enzymeUsage, indx] = sort(enzymeUsage);
+enzymeUsage = uFlux'./uBounds;
+[c p] = corr(log10(uFlux'), log10(uBounds))
+
+[enzymeUsage, indx] = sort(enzymeUsage, 'ascend');
 eqns = eqns(indx);
 
-plot(enzymeUsage, 1:length(eqns), 'o-')
+plot(enzymeUsage, 1:length(eqns), 'o')
 yticks(1:length(eqns))
 yticklabels(eqns)
 
 vO2max = solution.x(reactionNumbers(1));
 
+grid on
 
+ylim([0 length(eqns)]+0.5)
+
+xlim([0.01 1])
+set(gca, 'xscale', 'log')
+xlabel('enzyme usage')
 %%
 respirationChain = {
 'HMR_6921'
