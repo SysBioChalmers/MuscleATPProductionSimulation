@@ -2,7 +2,7 @@ hold all
 color2 = [215 86 40]/256;
 color1 = [93 155 211]/256;
 addpath('src2')
-dataFolder = 'mikael';
+dataFolder = 'subject1';
 data = importdata(['sampleData/' dataFolder '/data1.txt']);
 data = data.data;
 
@@ -16,7 +16,7 @@ ylabel('kcal')
 
 normalizedW = Wdata/max(Wdata);
 
-midpoint = 0.5;
+midpoint = 0.45;
 
 intervall1 = and(normalizedW<midpoint, normalizedW>0.1);
 intervall2 = and(normalizedW>midpoint, normalizedW<0.9);
