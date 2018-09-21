@@ -77,3 +77,6 @@ src2/runFullModel.asv
 glycogenKm/glycogenWmodel.txt
 glycogenKm/main.m
 randomSampling.mat
+src2/compareWithKneeData.m
+results/sensitivityAnalysis.xlsx
+src1/compareTwoGroups.m

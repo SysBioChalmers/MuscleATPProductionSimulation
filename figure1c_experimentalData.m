@@ -85,7 +85,15 @@ uFlux = max(abs(fullSolution(:,constraindRxns)));
 eqns = constructEquations(model, constraindRxns);
 enzymeUsage = uFlux'./uBounds;
 [c p] = corr(log10(uFlux'), log10(uBounds))
+scatter(uFlux', uBounds, 'filled')
+set(gca, 'xscale', 'log')
+set(gca, 'yscale', 'log')
+xlim([0 10)]
+xlabel('Flux')
+ylabel('Vmax')
 
+figure()
+hold all
 [enzymeUsage, indx] = sort(enzymeUsage, 'ascend');
 eqns = eqns(indx);
 
