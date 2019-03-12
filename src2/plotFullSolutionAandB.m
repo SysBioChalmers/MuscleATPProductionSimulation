@@ -41,8 +41,8 @@ function data = plotFullSolutionAandB(model, growthRates, results, bloodComp, Aa
 
     for j = 1:size(values,1)
        if max(abs(values(j,:)))< targetValue 
-            values(j,:) = values(j,:)*10;
-            metNames{j} = [metNames{j} '[x10]'];
+            values(j,:) = values(j,:)*16;
+            metNames{j} = [metNames{j} '[cmol]'];
        end
     end
 
