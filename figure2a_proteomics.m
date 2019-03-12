@@ -1,7 +1,8 @@
-load('../model/muscleModel.mat')
-A = importdata('proteomicLean.txt');
-C = importdata('ID_conversion_key.txt');
-uniprotMap = containers.Map(C.textdata(:,4), C.textdata(:,1));
+load('model/muscleModel.mat')
+addpath('proteomics')
+A = importdata('proteomics/proteomicLean.txt');
+C = importdata('proteomics/ID_conversion_key.txt', '\t');
+uniprotMap = containers.Map(C.textdata(:,2), C.textdata(:,1));
 
 %Note that the following protein mapping has been added
 %GLYCEROL-3-PHOSPHATE DEHYDROGENASE 1-LIKE.  -> P43304
@@ -14,8 +15,8 @@ for i = 2:length(geneList)
     geneList{i} = strrep(geneList{i}, ';', '');
     if isKey(uniprotMap, geneList{i})
        geneList{i} =  uniprotMap(geneList{i});
-    else
-       disp(geneList{i}) 
+%    else
+%       disp(geneList{i}) 
     end
 end
 geneList(1) = [];
@@ -28,8 +29,8 @@ geneMap = containers.Map(geneList, normalizedMass);
 
 [normalizedMass, indx]= sort(normalizedMass, 'descend');
 geneList = geneList(indx);
-plot(cumsum(normalizedMass), 'o-')
-ylim([0 1])
+%plot(cumsum(normalizedMass), 'o-')
+%ylim([0 1])
 
 %%
 %Plot proteomics by subsystem
@@ -41,8 +42,7 @@ ylim([0 1])
 %Plot mass distribution
 mapOfSystems = containers.Map;   
 mapOfSystems('Myosin') = {'ENSG00000092054' 'ENSG00000125414' 'ENSG00000180209' 'ENSG00000168530' 'ENSG00000111245' 'ENSG00000109061' 'ENSG00000160808' 'ENSG00000086967' 'ENSG00000198467' 'ENSG00000196465' 'ENSG00000143549' 'ENSG00000101306' 'ENSG00000144821', 'ENSG00000101470', 'ENSG00000175084', 'ENSG00000177791', 'ENSG00000130595','ENSG00000114854','ENSG00000130598','ENSG00000105048'};
-mapOfSystems('Albumin') = {'ENSG00000163631'};
-mapOfSystems('Myoglobin') = {'ENSG00000198125'};
+mapOfSystems('Albumin/Myoglobin') = {'ENSG00000163631','ENSG00000198125'};
 mapOfSystems('Creatine') = {'ENSG00000104879' 'ENSG00000131730' 'ENSG00000166165'};
 mapOfSystems('Glycogen phosphorylase') = {'ENSG00000068976'};
 mapOfSystems('Glycolysis') = getInvolvedGenes(model, ismember(model.subSystems, 'Glycolysis / Gluconeogenesis'));
@@ -65,7 +65,8 @@ mapOfSystems('TCA') = [mapOfSystems('TCA') 'ENSG00000120053', 'ENSG00000125166',
 %ENSG00000151729 %transporter of ATP from mitochondria
 %ENSG00000112992 %NNT
 
-allKeys = {'Myosin', 'Albumin', 'Myoglobin', 'Creatine', 'Glycogen phosphorylase', 'Glycolysis', 'OXPHOS', 'TCA', 'Fatty Acids'};
+%Pichart order:
+allKeys = {'Myosin', 'Albumin/Myoglobin', 'Creatine', 'Glycogen phosphorylase', 'Glycolysis', 'OXPHOS', 'TCA', 'Fatty Acids'};
 
 allGenes = [];
 results = zeros(length(allKeys),1);
@@ -93,8 +94,10 @@ respirationChain = {
 'HMR_4652'
 'HMR_6918'
 'HMR_6914'
-'HMR_6916'};
-name = {'I', 'II', 'III', 'IV', 'V'};
+'HMR_6916'
+'HMR_6911'
+};
+name = {'I', 'II', 'III', 'IV', 'V', 'ETF'};
 results = zeros(length(name),1);
 for i = 1:length(respirationChain)
     curGenes = getInvolvedGenes(model, ismember(model.rxns, respirationChain{i}));
@@ -104,13 +107,14 @@ plotPie(results, name)
 
 
 %%
-load('../model/reducedModel.mat')
+%Print the protein involved in each reaction 
+load('model/reducedModel.mat')
 result = zeros(length(model.rxns),1);
 eqns = constructEquations(model);
 
 detectionLimit = min(A.data(:,2));
 
-%Asign genes from the NADPH version of NADH rxns
+%Assign genes from the NADPH version of NADH rxns
 model.grRules{findIndex(model.rxns, 'HMR_3957')} = 'ENSG00000182054';
 %model.grRules{findIndex(model.rxns, 'HMR_6510')} = 'ENSG00000090013';
 
@@ -121,7 +125,7 @@ for i = 1:length(model.rxns)
 end
 
 %Did not detect HMR_4391	DHAP[c] <=> GAP[c]
-results(findIndex(model.rxns, 'HMR_4391')) = (detectionLimit * 30791)/massSum;
+% results(findIndex(model.rxns, 'HMR_4391')) = (detectionLimit * 30791)/massSum;
 
 
 
