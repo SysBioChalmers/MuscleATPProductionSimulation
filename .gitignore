@@ -80,3 +80,4 @@ randomSampling.mat
 src2/compareWithKneeData.m
 results/sensitivityAnalysis.xlsx
 src1/compareTwoGroups.m
+*.xlsx
