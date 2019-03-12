@@ -11,5 +11,5 @@ function superModel = appendStruct(superModel, curModel)
     superModel.rev = [superModel.rev; curModel.rev];
     superModel.b = [superModel.b; curModel.b];
     superModel.c = [superModel.c; curModel.c];
-    superModel.subSystems = [superModel.subSystems; strcat(curModel.rxns, ['_' curModel.name])];
+    superModel.subSystems = [superModel.subSystems; strcat(curModel.subSystems, ['_' curModel.name])];
 end
