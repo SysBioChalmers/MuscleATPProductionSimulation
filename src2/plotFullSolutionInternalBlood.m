@@ -24,10 +24,10 @@ function data = plotFullSolutionInternalBlood(model, growthRates, results, metab
             metNames = metaboliteList;                       
             
             for j = 1:size(values,1)
-                metNames{j}
-               if ismember(metNames{j}, {'palmitate', 'stearate'})
-                    values(j,:) = values(j,:)*10;
-                    metNames{j} = [metNames{j} '[x10]'];
+                %metNames{j}
+               if ismember(metNames{j}, {'palmitate'})
+                    values(j,:) = values(j,:)*16;
+                    metNames{j} = [metNames{j} '(cmol)'];
                end
             end
             metNames = indicateDirection(metNames, values);
