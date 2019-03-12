@@ -37,6 +37,8 @@ function superModel = addCompartment(superModel, compId, compartmentName)
     bloodModel.b = zeros(length(bloodModel.mets),1);  
     bloodModel.metComps = ones(length(bloodModel.mets),1);
     bloodModel.comps = 's';
+    bloodModel.subSystems = cell(length(bloodModel.rxns),1);
+    bloodModel.subSystems(:) = {'blood compartment'};
     superModel = appendStruct(superModel, bloodModel);
 end
 
