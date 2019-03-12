@@ -52,25 +52,6 @@ bonf_holm.m
 figureS1_fiberdistribution.m
 *.asv
 src2/runFullModel.asv
-sampleData/filip/data.txt
-sampleData/filip/la.txt
-sampleData/filip/RQ.txt
-sampleData/filip/VCO2.txt
-sampleData/filip/VE.txt
-sampleData/filip/VO2.txt
-sampleData/total oxphos sebastians prover.xlsx
-sampleData/rower/fatMax.xlsx
-sampleData/rower/HRvsO2.txt
-sampleData/rower/rq.jpg
-sampleData/rower/RQvsHR.txt
-sampleData/rower/RQVSWestimate.txt
-sampleData/rower/VCO2vsW.txt
-sampleData/rower/VE and HR.jpg
-sampleData/rower/VEvsO2.txt
-sampleData/rower/VO2andVCO2 - Copy.jpg
-sampleData/rower/VO2andVCO2.jpg
-sampleData/rower/VO2vsW.txt
-model/~$HMRdatabase2_00.xlsx
 sampleData/loadSampleData.m
 sampleData/moveAvg.m
 src2/runFullModel.asv
