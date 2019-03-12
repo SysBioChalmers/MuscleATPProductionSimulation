@@ -11,7 +11,8 @@ massConstraintRow = findIndex(model.mets, 'MassConstraint');
 weightRow = full(model.S(massConstraintRow,:));
 
 [glyYields, massYield, solutionNames, solutions] = calculateSubSolutions(model);
-[ATPperGly,ATPperProtein] = getParetoCurve(model);
+[ATPperGly,ATPperProtein, cMol,fullSolution] = getParetoCurve(model);
+%saveFluxes('fluxes/pareto.txt', model, fullSolution', ATPperProtein, 30);
 
 model.ub(findIndex(model.rxns, 'HMR_0483_back')) = 0;
 [ATPperGlyNoCIbypass,ATPperProteinNoCIbypass] = getParetoCurve(model);
@@ -37,6 +38,8 @@ scatter(massYield, glyYields, 50, 'filled', 'markerfacecolor', [17 115 187]/256)
 for i = 1:length(glyYields)
     text(massYield(i), glyYields(i), solutionNames{i})
 end
+
+
 
 %%
 figure()
