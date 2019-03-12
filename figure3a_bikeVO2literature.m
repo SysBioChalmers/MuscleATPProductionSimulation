@@ -155,8 +155,15 @@ text(1, 4, sprintf('p=%2.2e', p))
 ylim([0 16])
 color2 = [215 86 40]/256;
 hold all
+rng('default') % set random generator to same value each time
 xvals = 0.5*rand(length(slope1),1);
 xvals = xvals-mean(xvals);
+
+% for i = 1:length(xvals)
+%     tmp = plot([1 2] + xvals(i), [slope1(i) slope2(i)], '-', 'color', color2);
+%     tmp.Color(4) = 0.5;
+% end
+
 scatter(1 + xvals, slope1, 20, 'MarkerFaceColor', color2,'MarkerEdgeColor', color2, 'MarkerFaceAlpha', 0.5, 'MarkerEdgeAlpha', 0.6)
 scatter(2 + xvals, slope2, 20, 'MarkerFaceColor', color2,'MarkerEdgeColor', color2, 'MarkerFaceAlpha', 0.5, 'MarkerEdgeAlpha', 0.6)
 
@@ -165,35 +172,12 @@ text(0.3, median(slope1), sprintf('%2.1f', median(slope1)))
 text(1.3, median(slope2), sprintf('%2.1f', median(slope2)))
 
 %%
-% figure()
-% cutOff = median(subjectData(:,6));
-% exerciseGroup = subjectData(:,6)>cutOff;
-% groups = [1+exerciseGroup; 3+exerciseGroup];
-% 
-% h = boxplot(deltas, groups, 'Orientation',  'vertical',  'Colors', 'k', 'Widths', 1);
-% %set(h(7,:),'Visible','off')
-% set(gca, 'xtick', [1.5 3.5])
-% set(gca,'xticklabel', groupNames)  
-% ylim([0 17])
-% ylabel('dO2/dW')
-% 
-% color = [67 116 160; 151 185 224]/255;
-% h = findobj(gca,'Tag','Box');
-% for j=1:length(h)
-%     currentColor = color((mod(j,2)+1),:);
-%     a = patch(get(h(j),'XData'),get(h(j),'YData'), currentColor);
-%     uistack(a,'bottom');
-% end
-% 
-% p = ranksum(deltas(groups==1),deltas(groups==2));
-% text(1, 4, sprintf('p=%2.2f', p))
-% 
-% %[h p] = ttest(deltas(groups==1),deltas(groups==2));
-% 
-% p = ranksum(deltas(groups==3),deltas(groups==4));
-% text(3, 4, sprintf('p=%2.2f', p))
-% 
-% legend('VO2/kg <52 (11 subjects)', 'VO2/kg >52 (10 subjects)')
-% legend boxoff
+addpath('src2')
+Wvalues = [median(slope1) median(slope2)];
+Ovalue = 2 * mlToMol(Wvalues)/3600;
+ATPvalue = (1/27)/1000;
+ATPvalue./Ovalue
+
+
 
 
