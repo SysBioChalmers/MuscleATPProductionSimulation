@@ -40,7 +40,6 @@ function plotFullSolution(model, growthRates, fullSolution, plotExchange)
         %plot(growthRates, weightEstimate)
     end
 
-    hold off
 
 
 end
