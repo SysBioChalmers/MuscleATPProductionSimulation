@@ -1,0 +1,15 @@
+dwMuscle	4.16	#kg muscle wet weight*(1-0.792)
+muscleRatio	0.55	#type1
+m2Efficency	0.50	#
+type1tresh	9.00	#type 1 is activated first, 10 mol ATP corresponds to 20# of Wmax
+type2target	0.55	#type 2 dominates at the highest W rates
+vO2max	11.91	#Maximum oxygen uptake mmol/h/gdw
+maintainance	5.69	#
+internalWork	2.00	#
+peripheralFA	0.00	#
+peripheralLactateCapacity	0.00	#
+lactateBuffering	1.30	#Lactate accumulation flux for non steady state
+scalingFactor	2.96	#
+HMR_6914	1.25	#Specific activity Complex IV
+HMR_6921	0.88	#Specific activity Complex I
+HMR_6911	0.06	#Specific activity ETF
