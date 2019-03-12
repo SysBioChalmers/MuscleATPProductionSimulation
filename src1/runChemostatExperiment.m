@@ -15,11 +15,11 @@ for i = 1:length(growthRates)
     end
     %printFluxesAvlant(model, solution.x, false)
 end
-model = setParam(model, 'lb', objectiveFunction, 0);
-model = setParam(model, 'ub', objectiveFunction, 1000);
-model = setParam(model, 'obj', objectiveFunction, 1);
-
-solution = solveLin(model)
+% model = setParam(model, 'lb', objectiveFunction, 0);
+% model = setParam(model, 'ub', objectiveFunction, 1000);
+% model = setParam(model, 'obj', objectiveFunction, 1);
+% 
+% solution = solveLin(model)
 
 
 end
