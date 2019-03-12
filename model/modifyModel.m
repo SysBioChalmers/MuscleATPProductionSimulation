@@ -43,6 +43,11 @@ model.ub(findIndex(model.rxns, 'HMR_4280')) = 0;
 %Allow Glycerol phosphate shuttle
 model.lb(findIndex(model.rxns, 'HMR_0483')) = -1000;
 
+%Prevent Glycerol phosphate shuttle to FAD
+model.ub(findIndex(model.rxns,'HMR_0482_m1')) = 0;
+model.ub(findIndex(model.rxns,'HMR_0482_m2')) = 0;
+
+
 %Prevent Proline->ubiqinol cycle
 model.ub(findIndex(model.rxns, 'HMR_3837')) = 0;
 model.lb(findIndex(model.rxns, 'HMR_3838')) = 0;
@@ -75,7 +80,6 @@ glycogenPhos = createRXNStuct(model, 'GlycogenPhosphorylase', 'glycogen[c] + Pi[
 model=addRxns(model,glycogenPhos,3,'c',false);
 model.grRules{findIndex(model.rxns, 'GlycogenPhosphorylase')} = 'ENSG00000068976';
 
-
 %Remove cytosolic oxidation
 O2mets = ismember(model.metNames, 'O2');
 O2rxns = sum(abs(model.S(O2mets,:)))>0;
@@ -87,6 +91,9 @@ O2rxns = sum(abs(model.S(O2mets,:)))>0;
 O2rxns(ismember(model.rxns, {'HMR_4896', 'HMR_4898',  'HMR_6914', 'HMR_9048'})) = 0;
 model.lb(O2rxns) = 0;
 model.ub(O2rxns) = 0;
+
+
+
 
 
 %Overwrite raven model
