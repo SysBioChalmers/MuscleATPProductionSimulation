@@ -1,9 +1,9 @@
 hold all
 color2 = [215 86 40]/256;
 color1 = [93 155 211]/256;
-addpath('src2')
+addpath('../src2')
 dataFolder = 'subject1';
-data = importdata(['sampleData/' dataFolder '/data1.txt']);
+data = importdata(['../sampleData/' dataFolder '/data1.txt']);
 data = data.data;
 
 Wdata = data(:,1);
