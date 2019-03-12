@@ -26,7 +26,7 @@ end
 subplot(3,2,6)
 hold all
 
-for i = 1:length(xvals)
+for i = 1:size(resultsRQ,1)
     plot([1 2], resultsRQ(i,:), 'ko-', 'markerfacecolor', 'k')
 end
 
