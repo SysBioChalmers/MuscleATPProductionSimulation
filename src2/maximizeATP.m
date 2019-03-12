@@ -5,6 +5,10 @@ function maximumSolution = maximizeATP(model, settings)
     else
         solution = solveLin(model, true);
     end
-    maximumSolution = solution.x;
+    if length(solution.x) == 1
+        maximumSolution = zeros(size(model.S,2),1);
+    else
+        maximumSolution = solution.x;
+    end
 end
 
