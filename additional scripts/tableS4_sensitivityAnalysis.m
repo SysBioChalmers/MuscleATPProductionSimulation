@@ -1,6 +1,6 @@
 load('model/connectedMuscles')
-addpath('src2')
-addpath('sampleData')
+addpath('../src2')
+addpath('../sampleData')
 model = superModel;
 
 
