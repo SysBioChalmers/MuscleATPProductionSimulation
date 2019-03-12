@@ -29,4 +29,9 @@ superModel.compNames = superModel.comps;
 
 superModel = addSupportReactions(superModel, 0.5);
 
+%Add lactate accumulation
+%(Lactate- H+) + (HCO3- K+) -> (K+ Lactate-) + CO2 + H2O
+lactateBuffer = createRXNStuct(superModel, 'lactateBuffering', 'L-lactate[sb] => CO2[sb] + H2O[sb]', 0, 1000, 'Artificial reactions');
+superModel=addRxns(superModel,lactateBuffer,3,'sb',false);
+
 save('connectedMuscles.mat', 'superModel')
