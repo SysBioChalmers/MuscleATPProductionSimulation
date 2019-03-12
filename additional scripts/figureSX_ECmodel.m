@@ -1,11 +1,11 @@
-load('model/reducedModel')
-addpath('src1')
+load('../model/reducedModel')
+addpath('../src1')
 
 %rename subsystems
 %Pyruvate to Ac-Coa towards TCA
 
-model = mapDataToRxns(model, 'data/RxnAndSA.txt');
-model = mapProteomToRxns(model, 'data/RxnAndProtein.txt');
+model = mapDataToRxns(model, '../data/RxnAndSA.txt');
+model = mapProteomToRxns(model, '../data/RxnAndProtein.txt');
 
 
 %Set specific activity to high
