@@ -24,7 +24,7 @@ odeParam = @(T,X) lactateOde(T, X, lactateReservoir, basalFlux, vMax, lactateFlu
 [t,yv] = ode23s(odeParam, tIn, basalAmount);
 
 empiricalVO2 = 1350 + 1800 * (1-exp(-(60*t-(9.3/60))/(24.9/60)));
-empiricalVO2(t<9.3/3600) = 1345;
+empiricalVO2(t<9.3/3600) = 1350;
 lactateResults = yv/lactateReservoir;
 
 vLactateOut = mmLactate(lactateResults, vMax)-basalFlux;
@@ -87,8 +87,8 @@ errorbar(data(:,1), data(:,2), data(:,3), 'k.');
 plot(60*interestingTime, modifiedVO2(end)*[1 1],  '--', 'color', [0    0.4470    0.7410])
 plot(60*interestingTime, (data(1,2)*[1 1]), '--', 'color', [0.8500    0.3250    0.0980])
 
-empiricalVO2 = 1345 + 1767 * (1-exp(-(60*t-(9.3/60))/(24.9/60)));
-empiricalVO2(t<9.3/3600) = 1345;
+empiricalVO2 = 1350 + 1800 * (1-exp(-(60*t-(9.3/60))/(24.9/60)));
+empiricalVO2(t<9.3/3600) = 1350;
 plot(t*60, empiricalVO2,'k--');
 
 xlim(interestingTime*60)
