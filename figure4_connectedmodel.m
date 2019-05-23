@@ -5,7 +5,7 @@ model = superModel;
 
 subjectId = 'subject1';
 
-complex1Bypass = false;
+complex1Bypass = true;
 
 param = loadParm(subjectId, true);
 
