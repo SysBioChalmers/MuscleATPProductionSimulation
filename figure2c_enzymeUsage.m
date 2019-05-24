@@ -47,6 +47,12 @@ enzymeUsage = uFlux'./uBounds;
 rxnNames = model.rxns(constraindRxns);
 
 %%
+complexIrxn = findIndex(model.rxns, 'HMR_6921') == find(constraindRxns);
+fprintf('CI flux: %1.3f, bound: %1.3f\n', uFlux(complexIrxn), uBounds(complexIrxn))
+GPDreaction = findIndex(model.rxns, 'HMR_0479') == find(constraindRxns);
+fprintf('GPD flux: %1.3f, bound: %1.3f\n', uFlux(GPDreaction), uBounds(GPDreaction))
+
+%%
 hold all
 xdata = log10(uBounds);
 ydata = log10(uFlux');
