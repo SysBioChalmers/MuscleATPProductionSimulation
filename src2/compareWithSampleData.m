@@ -12,7 +12,11 @@ O2mod = molToMl(O2);
 CO2mod = molToMl(CO2);
 RQ = CO2mod./O2mod;
 RQtresh = find(RQ>0.98);
-RQtresh = RQtresh(1);
+if not(isempty(RQtresh))
+    RQtresh = RQtresh(1);
+else
+    RQtresh = length(ATPrate);
+end
 
 Wmod = molToW(1000*ATPrate);
 
