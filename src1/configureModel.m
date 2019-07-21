@@ -2,8 +2,6 @@ function model = configureModel(model, minimalMedia, minimalFlux)
 maintenance = 0;
 
 
-
-
 [exchangeRxns, exchangeRxnsIndexes]=getExchangeRxns(model,'both');
 
 %Minimal media simulation
@@ -16,8 +14,6 @@ model = setParam(model, 'ub', exchangeRxnsIndexes, 1000);
 
 model = setParam(model, 'lb', reactionNumbers, minimalFlux);
 model = setParam(model, 'ub', reactionNumbers, 1000);
-
-
 
 
 model = setParam(model, 'lb', 'human_ATPMaintainance', maintenance);
