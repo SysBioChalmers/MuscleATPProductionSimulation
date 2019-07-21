@@ -5,7 +5,7 @@ weightRow = full(model.S(massConstraintRow,:));
 
 minimalMedia = {
     'O2[s]'
-    'octanoic acid[s]'
+    'palmitate[s]'
     'glycogen[s]'
     'H2O[s]'
     };
@@ -21,9 +21,9 @@ reactionNumbers = getBounds(model, minimalMedia);
 
 fatNr = reactionNumbers(2);
 glucoseNr = reactionNumbers(3);
-stochiometry = [8 6];
+stochiometry = [16 6];
 
-model = setParam(model, 'obj', [fatNr glucoseNr], [8 6]);
+model = setParam(model, 'obj', [fatNr glucoseNr], stochiometry);
 model = configureModel(model, minimalMedia, minimalFlux);
 
 fullSolution = runChemostatExperiment(model, ATPRates, 'human_ATPMaintainance');
