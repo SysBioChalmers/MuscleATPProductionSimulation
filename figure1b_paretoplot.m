@@ -1,6 +1,4 @@
 close all
-hold all
-
 load('model/reducedModel')
 addpath('src1')
 
@@ -26,15 +24,17 @@ ATPperProteinNoCIbypass(isnan(ATPperProteinNoCIbypass)) = [];
 ATPperGlyNoCIbypass(end+1) = 0;
 ATPperProteinNoCIbypass(end+1) = ATPperProteinNoCIbypass(end);
 
+%%
+hold all
 area(ATPperProtein, ATPperGly, 'FaceColor', [17 115 187]/256, 'FaceAlpha', 0.2, 'EdgeColor', 'none')
 fill([ATPperProteinNoCIbypass flip(ATPperProtein)], [ATPperGlyNoCIbypass flip(ATPperGly)], [17 115 187]/256, 'FaceAlpha', 0.5,  'EdgeColor', 'none')
-plot(ATPperProtein, ATPperGly, 'linewidth', 2, 'color', [17 115 187]/256)
+plot(ATPperProtein, ATPperGly, 'linewidth', 3, 'color', [17 115 187]/256)
 
 ylim([0 7])
 xlim([0 701])
 ylabel('ATP/Cmol')
 xlabel('mmol ATP/g protein/h')
-scatter(massYield, glyYields, 50, 'filled', 'markerfacecolor', [17 115 187]/256)
+scatter(massYield, glyYields, 80, 'filled', 'markerfacecolor', [0.8500, 0.3250, 0.0980])
 for i = 1:length(glyYields)
     text(massYield(i), glyYields(i), solutionNames{i})
 end
@@ -42,23 +42,23 @@ end
 
 
 %%
-figure()
-hold all
-X = 1./ATPperProtein;
-Y =  1./ATPperGly;
-X(end) = [];
-Y(end) = [];
-Ymax = round(max(Y)*1.3,1);
-
-area([X min(X)*0.999 0], [Y Ymax Ymax], 'FaceColor', [150 150 150]/256, 'FaceAlpha', 0.2, 'EdgeColor', 'none')
-plot(1./ATPperProtein, 1./ATPperGly, 'linewidth', 2)
-plot(1./ATPperProteinNoCIbypass, 1./ATPperGlyNoCIbypass, '--', 'linewidth', 2, 'color', [17 115 187]/256)
-
-
-scatter(1./massYield, 1./glyYields, 50, 'filled', 'markerfacecolor', [17 115 187]/256)
-for i = 1:length(glyYields)
-    text(1./massYield(i), 1./glyYields(i), solutionNames{i})
-end
-xlim([0 10^-2])
-ylim([0 Ymax])
+% figure()
+% hold all
+% X = 1./ATPperProtein;
+% Y =  1./ATPperGly;
+% X(end) = [];
+% Y(end) = [];
+% Ymax = round(max(Y)*1.3,1);
+% 
+% area([X min(X)*0.999 0], [Y Ymax Ymax], 'FaceColor', [150 150 150]/256, 'FaceAlpha', 0.2, 'EdgeColor', 'none')
+% plot(1./ATPperProtein, 1./ATPperGly, 'linewidth', 2)
+% plot(1./ATPperProteinNoCIbypass, 1./ATPperGlyNoCIbypass, '--', 'linewidth', 2, 'color', [17 115 187]/256)
+% 
+% 
+% scatter(1./massYield, 1./glyYields, 50, 'filled', 'markerfacecolor', [17 115 187]/256)
+% for i = 1:length(glyYields)
+%     text(1./massYield(i), 1./glyYields(i), solutionNames{i})
+% end
+% xlim([0 10^-2])
+% ylim([0 Ymax])
 
