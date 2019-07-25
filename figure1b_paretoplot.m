@@ -12,8 +12,9 @@ weightRow = full(model.S(massConstraintRow,:));
 [ATPperGly,ATPperProtein, cMol,fullSolution] = getParetoCurve(model);
 %saveFluxes('fluxes/pareto.txt', model, fullSolution', ATPperProtein, 30);
 
-model.ub(findIndex(model.rxns, 'HMR_0483_back')) = 0;
-[ATPperGlyNoCIbypass,ATPperProteinNoCIbypass] = getParetoCurve(model);
+tmpModel = model;
+tmpModel.ub(findIndex(tmpModel.rxns, 'HMR_0483_back')) = 0;
+[ATPperGlyNoCIbypass,ATPperProteinNoCIbypass] = getParetoCurve(tmpModel);
 
 ATPperGly(end+1) = 0;
 ATPperProtein(end+1) = ATPperProtein(end);
@@ -30,7 +31,7 @@ area(ATPperProtein, ATPperGly, 'FaceColor', [17 115 187]/256, 'FaceAlpha', 0.2, 
 fill([ATPperProteinNoCIbypass flip(ATPperProtein)], [ATPperGlyNoCIbypass flip(ATPperGly)], [17 115 187]/256, 'FaceAlpha', 0.5,  'EdgeColor', 'none')
 plot(ATPperProtein, ATPperGly, 'linewidth', 3, 'color', [17 115 187]/256)
 
-ylim([0 7])
+ylim([0 8])
 xlim([0 701])
 ylabel('ATP/Cmol')
 xlabel('mmol ATP/g protein/h')
