@@ -31,7 +31,7 @@ function [glyYields, massYield, solutionNames, solutions] = calculateSubSolution
     model = setParam(model, 'ub', objectiveFunction, 1000);
     model = setParam(model, 'obj', objectiveFunction, 1);
 
-    solutionNames = {'Aerobic (fat)', 'Aerobic (glycogen)', 'Complex I bypass', 'Fermentative', 'Uncoupling'};
+    solutionNames = {'oxidative (fat)', 'oxidative (glycogen)', 'complex I bypass', 'fermentative', 'uncoupling'};
     solutions = zeros(5,length(model.rxns));
 
     for i = 1:size(solutions,1)
@@ -43,6 +43,8 @@ function [glyYields, massYield, solutionNames, solutions] = calculateSubSolution
             case 2
                 %Glucose
                 tmpModel = setParam(tmpModel, 'lb', glucoseNr, -1);
+                %Block Mal-Asp
+                tmpModel = setParam(tmpModel, 'ub', 'HMR_3829', 0);
             case 3
                 %bypass of complex 1
                 tmpModel = setParam(tmpModel, 'lb', glucoseNr, -1);
