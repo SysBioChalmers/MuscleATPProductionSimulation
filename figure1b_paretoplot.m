@@ -35,7 +35,7 @@ ylim([0 8])
 xlim([0 701])
 ylabel('ATP/Cmol')
 xlabel('mmol ATP/g protein/h')
-scatter(massYield, glyYields, 80, 'filled', 'markerfacecolor', [0.8500, 0.3250, 0.0980])
+scatter(massYield, glyYields, 50, 'filled', 'markerfacecolor', [0.8500, 0.3250, 0.0980])
 for i = 1:length(glyYields)
     text(massYield(i), glyYields(i), solutionNames{i})
 end

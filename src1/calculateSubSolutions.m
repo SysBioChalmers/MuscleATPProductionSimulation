@@ -31,29 +31,32 @@ function [glyYields, massYield, solutionNames, solutions] = calculateSubSolution
     model = setParam(model, 'ub', objectiveFunction, 1000);
     model = setParam(model, 'obj', objectiveFunction, 1);
 
-    solutionNames = {'oxidative (fat)', 'oxidative (glycogen)', 'complex I bypass', 'fermentative', 'uncoupling'};
-    solutions = zeros(5,length(model.rxns));
+    solutionNames = {'oxidative (fat)', 'oxidative (glycosyl)',  'oxidative (glycosyl)', 'complex I bypass', 'fermentative', 'uncoupling'};
+    solutions = zeros(length(solutionNames),length(model.rxns));
 
     for i = 1:size(solutions,1)
         tmpModel = model;
         switch i
             case 1
                 %Fatty acid:
-                tmpModel = setParam(tmpModel, 'lb', fatNr, -1); 
+                tmpModel = setParam(tmpModel, 'lb', fatNr, -1);
             case 2
+                %Glucose
+                tmpModel = setParam(tmpModel, 'lb', glucoseNr, -1);
+            case 3
                 %Glucose
                 tmpModel = setParam(tmpModel, 'lb', glucoseNr, -1);
                 %Block Mal-Asp
                 tmpModel = setParam(tmpModel, 'ub', 'HMR_3829', 0);
-            case 3
+            case 4
                 %bypass of complex 1
                 tmpModel = setParam(tmpModel, 'lb', glucoseNr, -1);
                 tmpModel = setParam(tmpModel, 'ub', 'HMR_6921', 0);
-            case 4              
+            case 5              
                 %Remove oxygen
                 tmpModel = setParam(tmpModel, 'lb', glucoseNr, -1);
                 tmpModel = setParam(tmpModel, 'ub', 'HMR_6914', 0);               
-            case 5
+            case 6
                 %uncoupling
                 tmpModel = setParam(tmpModel, 'lb', glucoseNr, -1);
                 tmpModel = setParam(tmpModel, 'ub', 'HMR_6916', 0);                 
