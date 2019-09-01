@@ -107,51 +107,5 @@ end
 legend(h, subSystemShortnames, 'location', 'NW')
 legend boxoff
 
-%%
-figure()
-hold all
-[enzymeUsage, indx] = sort(enzymeUsage, 'ascend');
-eqns = eqns(indx);
 
-plot(enzymeUsage, 1:length(eqns), 'o')
-yticks(1:length(eqns))
-yticklabels(eqns)
-
-vO2max = solution.x(reactionNumbers(1));
-
-grid on
-
-ylim([0 length(eqns)]+0.5)
-
-xlim([10^-4 1])
-set(gca, 'xscale', 'log')
-xlabel('enzyme usage')
-%%
-respirationChain = {
-'HMR_6921'
-'HMR_4652'
-'HMR_6918'
-'HMR_6914'
-'HMR_6916'};
-name = {'I', 'II', 'III', 'IV', 'V'};
-solutions = find(sum(abs(fullSolution),2)>0);
-solutions = solutions(end);
-fluxDist = fullSolution(solutions,:);
-
-for i = 1:length(respirationChain)
-    curRxn = findIndex(model.rxns, respirationChain{i});
-    proteinMass = model.proteinMass(curRxn);
-    specificActivity = model.specificActivity(curRxn);
-    curFlux = fluxDist(curRxn);
-    
-    if curFlux < 0
-        curFlux = -curFlux;
-    end
-    
-    predictedMass = curFlux/(60*specificActivity*0.5);  
-        
-    if proteinMass>0
-       fprintf('%s\t%2.6f\t%2.6f\n', name{i}, predictedMass, proteinMass)
-    end
-end
 
