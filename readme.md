@@ -13,7 +13,7 @@ Human muscles are tailored towards ATP synthesis. The muscles convert glucose to
 
 - Pubmed ID: NaN
 
-- Last update: 2019-03-12
+- Last update: 2019-08-29
 
 
 
@@ -24,7 +24,7 @@ This repository is administered by @avlant, Division of Systems and Synthetic Bi
 The repo contains scripts that run under Matlab, no installation is required. Open files in matlab and press the green play button, more details [here](https://se.mathworks.com/help/matlab/matlab_prog/create-scripts.html).
 
 ### Required Software:
-Code has been tested under windows 7 using matlab and RAVEN.
+Code has been tested under windows 10 using matlab and RAVEN.
 
 * *_PROGRAMMING LANGUAGE/Version_*  (e.g.):
   * You need a functional Matlab installation of **Matlab_R_2018_b**
