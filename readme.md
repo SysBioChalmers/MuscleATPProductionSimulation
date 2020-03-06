@@ -3,7 +3,7 @@
 - Models and scripts for simulations of ATP production in muscle, the repo contains: A) A small scale enzyme constrained stoichiometric model of metabolism of the single muscle fiber B) A whole body metabolic model incorporating complex I bypass.
 
 - Abstract:
-Human muscles are tailored towards ATP synthesis. The muscles convert glucose to lactate when exercising at high work rates. This is less nutrient efficient than respiration and there is hence a trade-off between endurance and power. To study this phenomenon, we integrated proteomics data from muscle fibers with an enzyme-constrained metabolic model. We found that ATP synthesis in muscle is constrained by the catalytic capacity of several enzymes. Additionally, bypassing complex I of the electron transport chain was found to increase the amount of ATP that can be synthesized per gram of protein, which suggested a third metabolic mode, distinct from the fully oxidative pathway. To test if this mode may occur in vivo, we conducted high resolved incremental exercise tests for five subjects. Their gas exchange at different work rates was accurately reproduced by a whole-body metabolic model incorporating complex I bypass. The study therefore provides new insight into metabolism during high intensity exercise.
+Human muscles are tailored towards ATP synthesis. When exercising at high work rates muscles convert glucose to lactate, which is less nutrient efficient than respiration. There is hence a trade-off between endurance and power. Metabolic models have been developed to study how limited catalytic capacity of enzymes affects ATP synthesis. Here we integrate an enzyme-constrained metabolic model with proteomics data from muscle fibers. We find that ATP synthesis is constrained by several enzymes. A metabolic bypass of mitochondrial complex I is found to increase the ATP synthesis rate per gram of protein compared to full respiration. To test if this metabolic mode occurs in vivo, we conduct a high resolved incremental exercise tests for five subjects. Their gas exchange at different work rates is accurately reproduced by a whole-body metabolic model incorporating complex I bypass. The study therefore shows how proteome allocation influences metabolism during high intensity exercise.
 
 - KeyWords: Protein allocation, FBA, UCP3, vO2max, lactate threshold, running economy, slow component
 
@@ -11,9 +11,9 @@ Human muscles are tailored towards ATP synthesis. The muscles convert glucose to
 
 - Reference: Submitted
 
-- Pubmed ID: NaN
+- Pubmed ID: PMC6838197
 
-- Last update: 2019-08-29
+- Last update: 2020-03-06
 
 
 
