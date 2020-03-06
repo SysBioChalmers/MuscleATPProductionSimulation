@@ -34,6 +34,7 @@ function [glyYields, massYield, solutionNames, solutions] = calculateSubSolution
     solutionNames = {'oxidative (fat)', 'oxidative (glycosyl)',  'oxidative (glycosyl)', 'complex I bypass', 'fermentative', 'uncoupling'};
     solutions = zeros(length(solutionNames),length(model.rxns));
 
+    tresh = 10^-6;
     for i = 1:size(solutions,1)
         tmpModel = model;
         switch i
@@ -61,7 +62,14 @@ function [glyYields, massYield, solutionNames, solutions] = calculateSubSolution
                 tmpModel = setParam(tmpModel, 'lb', glucoseNr, -1);
                 tmpModel = setParam(tmpModel, 'ub', 'HMR_6916', 0);                 
         end
-        res = solveLinMin(tmpModel);
+        
+        %Minimize protein instead of flux
+        %res = solveLinMin(tmpModel);
+        res = solveLin(tmpModel);
+        tmpModel.lb(find(tmpModel.c)) = -res.f -tresh;
+        tmpModel.c = -weightRow;
+        res = solveLin(tmpModel);
+        
         solutions(i,:) = res.x;
         %printFluxes(tmpModel, res.x, false, 0, [], '%rxnID\t%eqn\t%flux\n')
     end
